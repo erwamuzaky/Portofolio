@@ -1868,12 +1868,21 @@ html.js.loader-aktif body {
     overflow: hidden;
 }
 
-html.js.loader-aktif :is(header, main, footer, .ornamen-jaring) {
+html.js.loader-aktif :is(header, main, footer) {
     opacity: 0;
 }
 
-html.js.loader-selesai :is(header, main, footer, .ornamen-jaring) {
+html.js.loader-aktif .ornamen-jaring {
+    opacity: 0;
+}
+
+html.js.loader-selesai :is(header, main, footer) {
     opacity: 1;
+    transition: opacity 0.45s ease;
+}
+
+html.js.loader-selesai .ornamen-jaring {
+    opacity: 0.08;
     transition: opacity 0.45s ease;
 }
 
