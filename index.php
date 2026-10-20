@@ -207,8 +207,14 @@ try {
                 </svg>
 
                 <div class="figur-tumpuk" id="figurTumpuk">
-                    <img class="figur-topeng" src="foto/topeng.png" alt="Siluet figur bertopeng" width="600" height="800" loading="eager">
-                    <img class="figur-wajah" id="figurWajah" src="foto/wajah.png" alt="Foto wajah Erwa Muzaky" width="600" height="800" loading="eager">
+                    <picture>
+                        <source srcset="foto/topeng.webp" type="image/webp">
+                        <img class="figur-topeng" src="foto/topeng.png" alt="Siluet figur bertopeng" width="900" height="1200" loading="eager">
+                    </picture>
+                    <picture>
+                        <source srcset="foto/wajah.webp" type="image/webp">
+                        <img class="figur-wajah" id="figurWajah" src="foto/wajah.png" alt="Foto wajah Erwa Muzaky" width="900" height="1200" loading="eager">
+                    </picture>
                 </div>
 
                 <button type="button" class="figur-tombol" id="figurTombol" aria-label="Tukar tampilan antara topeng dan wajah" aria-pressed="false" hidden></button>
