@@ -267,6 +267,7 @@ section h2::after {
 
 /* --- HERO POSTER: BEYOND THE MASK --- */
 .hero-poster {
+    position: relative;
     display: grid;
     grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
     align-items: center;
@@ -315,10 +316,6 @@ section h2::after {
     width: min(30vw, 320px);
     color: var(--blue-terang);
     opacity: 0.14;
-}
-
-.poster-kiri {
-    position: relative;
 }
 
 .poster-left {
@@ -417,7 +414,7 @@ section h2::after {
 }
 
 .poster-vertikal {
-    position: fixed;
+    position: absolute;
     left: 0.9rem;
     top: 50%;
     transform: translateY(-50%) rotate(180deg);
