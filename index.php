@@ -373,6 +373,7 @@ try {
 
     <script src="galeri.js"></script>
     <script src="poster.js"></script>
+    <script src="kursor.js"></script>
 
 </body>
 

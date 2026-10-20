@@ -1717,6 +1717,41 @@ html.js .reveal.tampil {
     }
 }
 
+.kursor-jaring {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 34px;
+    height: 34px;
+    margin: -17px 0 0 -17px;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.08s linear;
+    color: var(--blue-terang);
+    will-change: transform;
+}
+
+.kursor-jaring svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+html.js.kursor-aktif .kursor-jaring {
+    opacity: 0.85;
+}
+
+html.js.kursor-di-figur .kursor-jaring {
+    opacity: 0;
+}
+
+@media (pointer: coarse) {
+    .kursor-jaring {
+        display: none;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     html {
         scroll-behavior: auto;
@@ -1731,6 +1766,10 @@ html.js .reveal.tampil {
     .poster-reticle {
         animation: none !important;
         opacity: 0.2;
+    }
+
+    .kursor-jaring {
+        display: none !important;
     }
 
     * {
