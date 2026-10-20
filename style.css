@@ -399,18 +399,25 @@ section h2::after {
 }
 
 .poster-vertikal {
-    position: absolute;
-    left: 0;
-    bottom: 3rem;
-    transform: rotate(180deg);
+    position: fixed;
+    left: 0.9rem;
+    top: 50%;
+    transform: translateY(-50%) rotate(180deg);
     writing-mode: vertical-rl;
     font-size: 0.72rem;
     font-weight: 600;
     letter-spacing: 0.28em;
     text-transform: uppercase;
-    color: var(--muted);
-    opacity: 0.55;
+    color: var(--blue-terang);
+    opacity: 0.5;
     pointer-events: none;
+    z-index: 2;
+}
+
+@media (max-width: 1200px) {
+    .poster-vertikal {
+        display: none;
+    }
 }
 
 .poster-figur {
