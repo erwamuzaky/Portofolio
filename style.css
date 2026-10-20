@@ -1893,6 +1893,278 @@ html.js.loader-selesai .loader-jaring {
     color: var(--red);
 }
 
+/* ==========================================
+   FASE 1: HERO (penyempurnaan desain)
+   ========================================== */
+
+/* --- Token font --- */
+:root {
+    --font-display: 'Anton', 'Arial Narrow', 'Haettenschweiler', 'Impact', sans-serif;
+    --font-serif-italic: 'Instrument Serif', 'Georgia', 'Times New Roman', serif;
+    --grad-aksen: linear-gradient(92deg, #ff9a3c 0%, #e23636 100%);
+}
+
+/* --- Grain statis pada body (SVG feTurbulence) --- */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    pointer-events: none;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+}
+
+/* --- Judul hero: Anton, uppercase, clamp besar --- */
+.poster-judul {
+    font-family: var(--font-display);
+    line-height: 0.9;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.2rem;
+}
+
+.poster-baris1,
+.poster-baris2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    text-transform: uppercase;
+    line-height: 0.9;
+    letter-spacing: -0.01em;
+}
+
+.poster-baris1 {
+    font-size: clamp(3.5rem, 10.5vw, 9rem);
+    color: var(--text);
+}
+
+.poster-baris2 {
+    font-size: clamp(3.5rem, 10.5vw, 9rem);
+    line-height: 0.9;
+    color: #ff6a3c;
+    background-image: var(--grad-aksen);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    -webkit-text-stroke: 0;
+    text-stroke: 0;
+}
+
+.poster-script {
+    font-family: var(--font-serif-italic);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.6rem, 4vw, 3rem);
+    color: #ffffff;
+    text-transform: none;
+    transform: rotate(-2deg);
+    transform-origin: left center;
+    line-height: 1;
+    margin: 0.2em 0 0.1em 0.12em;
+}
+
+/* --- Label Role/Focus/Time --- */
+.poster-label {
+    gap: 1.75rem;
+    padding: 1.1rem 0 0;
+    border-top: 1px solid var(--line);
+}
+
+.poster-label-kunci {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--blue-terang);
+}
+
+.poster-label-nilai {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+/* --- Tombol --- */
+.btn {
+    border-radius: 4px;
+    font-weight: 700;
+    transition: transform 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease;
+}
+
+.btn-primary {
+    background: var(--red);
+    color: #ffffff;
+    border: 1px solid var(--red);
+    box-shadow: 4px 4px 0 var(--blue);
+}
+
+.btn-primary:hover {
+    background: var(--red);
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--blue);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: #ffffff;
+    border: 2px solid #ffffff;
+    box-shadow: 4px 4px 0 var(--blue);
+}
+
+.btn-secondary:hover {
+    background: #ffffff;
+    color: var(--bg);
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--blue);
+}
+
+.btn:focus-visible {
+    outline: 3px solid var(--blue-terang);
+    outline-offset: 3px;
+}
+
+/* --- Figur: shadow merah + halo kepala + menempel bawah --- */
+.poster-figur {
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.figur-tumpuk {
+    filter: drop-shadow(0 0 60px rgba(226, 54, 54, 0.35));
+    align-self: flex-end;
+}
+
+.figur-tumpuk::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 6%;
+    width: 120%;
+    aspect-ratio: 1;
+    transform: translate(-50%, -18%);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(226, 54, 54, 0.5) 0%, rgba(226, 54, 54, 0) 62%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* --- Navbar: link tengah, uppercase, indikator garis merah --- */
+nav a {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    border-radius: 0;
+    padding: 8px 12px;
+    position: relative;
+    color: var(--blue-terang);
+    background: none;
+}
+
+nav a::after {
+    content: '';
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 2px;
+    height: 2px;
+    background: var(--red);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.2s ease;
+}
+
+nav a:hover,
+nav a:focus-visible {
+    color: #ffffff;
+    background: none;
+}
+
+nav a:hover::after,
+nav a:focus-visible::after {
+    transform: scaleX(1);
+}
+
+nav a.aktif::after {
+    transform: scaleX(1);
+}
+
+.header-dalam {
+    position: relative;
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+/* --- Elemen gelantungan di navbar --- */
+.gelantungan {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: clamp(48px, 6vw, 84px);
+    height: auto;
+    transform-origin: 50% 0%;
+    translate: -50% 0;
+    pointer-events: none;
+    z-index: 2;
+    animation: gelantungan-ayun 6s ease-in-out infinite;
+}
+
+@keyframes gelantungan-ayun {
+    0%,
+    100% { transform: rotate(-4deg); }
+    50% { transform: rotate(4deg); }
+}
+
+@media (max-width: 1200px) {
+    .gelantungan {
+        display: none;
+    }
+}
+
+@media (max-height: 820px) {
+    .poster-baris1,
+    .poster-baris2 {
+        font-size: clamp(2.4rem, 6.5vw, 5rem);
+    }
+
+    .poster-script {
+        font-size: clamp(1.3rem, 2.6vw, 2.2rem);
+    }
+
+    .hero-poster {
+        padding-top: 5rem;
+        padding-bottom: 1rem;
+    }
+
+    .figur-tumpuk {
+        width: min(78%, 440px);
+    }
+}
+
+@media (max-height: 700px) {
+    .poster-judul {
+        margin-bottom: 0.7rem;
+    }
+
+    .poster-desk {
+        margin-bottom: 1rem;
+    }
+
+    .poster-tombol {
+        margin-bottom: 1rem;
+    }
+
+    .poster-label {
+        padding-top: 0.7rem;
+    }
+
+    .figur-tumpuk {
+        width: min(70%, 380px);
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     html {
         scroll-behavior: auto;
