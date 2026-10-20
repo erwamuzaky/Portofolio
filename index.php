@@ -53,6 +53,8 @@ try {
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Caveat:wght@600&display=swap">
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%23090b12'/%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%23e23636' stroke-width='2'/%3E%3Cpath d='M16 3v26M3 16h26M7 7l18 18M25 7L7 25' stroke='%234f7dff' stroke-width='1' opacity='.55'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23e23636'/%3E%3C/svg%3E">
+    <script>document.documentElement.classList.add('js');</script>
 </head>
 
 <body>
@@ -217,7 +219,7 @@ try {
         <section id="about">
             <h2>About Me</h2>
 
-            <div class="about-grid">
+            <div class="about-grid reveal">
                 <div class="about-bio">
                     <p><?= esc($aboutBuka) ?></p>
 
@@ -273,7 +275,7 @@ try {
             </div>
 
             <!-- HARD SKILLS -->
-            <div class="skills-block">
+            <div class="skills-block reveal">
                 <h3 class="sub-title">Hard Skills</h3>
                 <ul class="skills-grid">
                     <?php foreach ($hardSkills as $skill): ?>
@@ -288,7 +290,7 @@ try {
             </div>
 
             <!-- SOFT SKILLS -->
-            <div class="skills-block">
+            <div class="skills-block reveal">
                 <h3 class="sub-title">Soft Skills</h3>
                 <ul class="soft-skills-grid">
                     <?php foreach ($softSkills as $skill): ?>
@@ -301,7 +303,7 @@ try {
             </div>
 
             <!-- RIWAYAT PENDIDIKAN -->
-            <div class="education-block">
+            <div class="education-block reveal">
                 <h3 class="sub-title">Riwayat Pendidikan</h3>
                 <ol class="timeline">
                     <?php foreach ($daftarPendidikan as $didik): ?>
@@ -322,8 +324,8 @@ try {
         <section id="project">
             <h2>My Project</h2>
             <ul class="projects-grid">
-                <?php foreach ($daftarProject as $proyek): ?>
-                <li class="project-card">
+                <?php foreach ($daftarProject as $i => $proyek): ?>
+                <li class="project-card reveal" style="--delay: <?= min($i, 5) * 70 ?>ms">
                     <?php if ($proyek['gambar']): ?>
                     <img src="<?= esc($proyek['gambar']) ?>" alt="Tampilan <?= esc($proyek['judul']) ?>" class="project-img" loading="lazy">
                     <?php endif; ?>
@@ -349,7 +351,7 @@ try {
 
         <!-- ================= 4. CONTACT ================= -->
         <section id="contact">
-            <div class="contact-box">
+            <div class="contact-box reveal">
                 <h2>Contact Me</h2>
                 <p><?= esc($contactPesan) ?></p>
 

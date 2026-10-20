@@ -432,6 +432,18 @@ section h2::after {
     position: relative;
     width: min(78%, 400px);
     aspect-ratio: 3 / 4;
+    /* Penyetelan lapisan figur tanpa menyentuh JS:
+       --wajah-x     geser lapisan wajah ke kanan (+) / kiri (-), satuan %
+       --wajah-y     geser lapisan wajah ke bawah (+) / naik (-), satuan %
+       --wajah-skala perbesar (1.1) / perkecil (0.9) lapisan wajah
+       --topeng-x / --topeng-y / --topeng-skala  sama, untuk lapisan topeng
+       Contoh: .figur-tumpuk { --wajah-y: -4%; --wajah-skala: 1.08; } */
+    --wajah-x: 0%;
+    --wajah-y: 0%;
+    --wajah-skala: 1;
+    --topeng-x: 0%;
+    --topeng-y: 0%;
+    --topeng-skala: 1;
 }
 
 .figur-topeng,
@@ -444,7 +456,12 @@ section h2::after {
     object-position: bottom center;
 }
 
+.figur-topeng {
+    transform: translate(var(--topeng-x), var(--topeng-y)) scale(var(--topeng-skala));
+}
+
 .figur-wajah {
+    transform: translate(var(--wajah-x), var(--wajah-y)) scale(var(--wajah-skala));
     -webkit-mask-image: radial-gradient(circle at var(--x, 50%) var(--y, 42%), #000 var(--r, 24%), transparent calc(var(--r, 24%) + 14%));
     mask-image: radial-gradient(circle at var(--x, 50%) var(--y, 42%), #000 var(--r, 24%), transparent calc(var(--r, 24%) + 14%));
     -webkit-mask-repeat: no-repeat;
@@ -1476,14 +1493,17 @@ body.admin {
    ============================================================ */
 
 .reveal {
-    opacity: 0;
-    transform: translateY(28px);
     transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
     transition-delay: var(--delay, 0ms);
     will-change: opacity, transform;
 }
 
-.reveal.tampil {
+html.js .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+}
+
+html.js .reveal.tampil {
     opacity: 1;
     transform: none;
 }
@@ -1665,9 +1685,15 @@ body.admin {
         scroll-behavior: auto;
     }
 
+    html.js .reveal,
     .reveal {
         opacity: 1 !important;
         transform: none !important;
+    }
+
+    .poster-reticle {
+        animation: none !important;
+        opacity: 0.2;
     }
 
     * {
