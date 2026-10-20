@@ -143,6 +143,10 @@ main::before {
     opacity: 0.05;
     background-size: 46px 52px;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='46' height='52' viewBox='0 0 46 52'%3E%3Cg fill='none' stroke='%23e8eefc' stroke-width='1'%3E%3Cpath d='M23 0 L46 26 L23 52 L0 26 Z'/%3E%3Cpath d='M23 0 L23 52 M0 26 L46 26'/%3E%3C/g%3E%3C/svg%3E");
+    -webkit-mask-image: radial-gradient(ellipse 72% 62% at 50% 50%, transparent 0%, transparent 34%, #000 92%);
+    mask-image: radial-gradient(ellipse 72% 62% at 50% 50%, transparent 0%, transparent 34%, #000 92%);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
 }
 
 /*
@@ -157,7 +161,7 @@ main::after {
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    opacity: 0.5;
+    opacity: 0.1;
     background-repeat: repeat, no-repeat, no-repeat;
     background-size: 320px 320px, var(--halftone-jarak) var(--halftone-jarak), 100% 100%;
     background-position: 0 0, 0 0, center;
@@ -165,6 +169,10 @@ main::after {
         url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320' viewBox='0 0 320 320'%3E%3Cg fill='none' stroke='%23e23636' stroke-width='1'%3E%3Cpath d='M160 160 L320 160 M160 160 L160 320 M160 160 L306 306 M160 160 L160 0 M160 160 L306 14 M160 160 L14 306 M160 160 L0 160 M160 160 L14 14'/%3E%3Cpath d='M160 0 Q210 60 160 120 Q110 60 160 0 Z'/%3E%3Cpath d='M160 320 Q210 260 160 200 Q110 260 160 320 Z'/%3E%3Cpath d='M0 160 Q78 210 160 160 Q78 110 0 160 Z'/%3E%3Cpath d='M320 160 Q242 210 160 160 Q242 110 320 160 Z'/%3E%3Cpath d='M320 320 Q246 246 160 160 Q246 74 320 0'/%3E%3Cpath d='M0 0 Q74 74 160 160 Q74 246 0 320'/%3E%3Cpath d='M320 0 Q246 74 160 160 Q74 74 0 0'/%3E%3Cpath d='M0 320 Q74 246 160 160 Q74 74 0 0'/%3E%3C/g%3E%3C/svg%3E"),
         radial-gradient(circle at 50% 50%, var(--halftone-titik) 1.1px, transparent 1.2px),
         linear-gradient(180deg, rgba(226, 54, 54, 0.05) 0%, transparent 42%, rgba(22, 48, 140, 0.05) 100%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, transparent 0%, transparent 32%, #000 90%);
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, transparent 0%, transparent 32%, #000 90%);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
 }
 
 section {
