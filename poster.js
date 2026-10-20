@@ -155,4 +155,15 @@
     if (median.addEventListener) {
         median.addEventListener('change', aturUlang);
     }
+
+    var vertikal = document.querySelector('.poster-vertikal');
+    var home = document.getElementById('home');
+    if (vertikal && home && 'IntersectionObserver' in window) {
+        var pengamatVertikal = new IntersectionObserver(function (entri) {
+            entri.forEach(function (e) {
+                vertikal.classList.toggle('vertikal-tampil', e.isIntersecting);
+            });
+        }, { threshold: 0.15 });
+        pengamatVertikal.observe(home);
+    }
 })();

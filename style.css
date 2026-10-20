@@ -85,7 +85,10 @@ a {
     color: var(--red);
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
     line-height: 1.25;
     color: var(--text);
 }
@@ -420,8 +423,8 @@ section h2::after {
 }
 
 .poster-vertikal {
-    position: absolute;
-    left: 0.9rem;
+    position: fixed;
+    left: clamp(8px, 1.5vw, 20px);
     top: 50%;
     transform: translateY(-50%) rotate(180deg);
     writing-mode: vertical-rl;
@@ -430,12 +433,17 @@ section h2::after {
     letter-spacing: 0.28em;
     text-transform: uppercase;
     color: var(--blue-terang);
-    opacity: 0.5;
+    opacity: 0;
     pointer-events: none;
     z-index: 2;
+    transition: opacity 0.4s ease;
 }
 
-@media (max-width: 1200px) {
+html.js .poster-vertikal.vertikal-tampil {
+    opacity: 0.5;
+}
+
+@media (max-width: 1499px) {
     .poster-vertikal {
         display: none;
     }
@@ -452,7 +460,9 @@ section h2::after {
 }
 
 @keyframes reticle-putar {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .figur-tumpuk {
@@ -918,7 +928,7 @@ html.js .project-card.reveal.tampil:hover {
     opacity: 0.35;
 }
 
-.project-card > * {
+.project-card>* {
     position: relative;
     z-index: 1;
 }
@@ -997,7 +1007,7 @@ html.js .project-card.reveal.tampil:hover {
     margin-bottom: 0.75rem;
 }
 
-.contact-box > p {
+.contact-box>p {
     color: var(--muted);
     max-width: 46ch;
     margin: 0 auto 1.5rem;
@@ -1056,7 +1066,7 @@ body.admin {
     min-height: 100vh;
 }
 
-.admin-shell > main.admin-content {
+.admin-shell>main.admin-content {
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
@@ -1533,7 +1543,7 @@ body.admin {
         display: block;
     }
 
-    .admin-shell > main.admin-content {
+    .admin-shell>main.admin-content {
         margin-left: 0;
     }
 
@@ -1559,7 +1569,7 @@ body.admin {
     }
 
     .admin-content,
-    .admin-shell > main.admin-content {
+    .admin-shell>main.admin-content {
         padding: 1.5rem 1.25rem 3rem;
         min-height: auto;
     }
@@ -2141,9 +2151,15 @@ nav a.aktif::after {
 }
 
 @keyframes gelantungan-ayun {
+
     0%,
-    100% { transform: rotate(-4deg); }
-    50% { transform: rotate(4deg); }
+    100% {
+        transform: rotate(-4deg);
+    }
+
+    50% {
+        transform: rotate(4deg);
+    }
 }
 
 @media (max-width: 1200px) {
@@ -2153,6 +2169,7 @@ nav a.aktif::after {
 }
 
 @media (max-height: 820px) {
+
     .poster-baris1,
     .poster-baris2 {
         font-size: clamp(2.4rem, 6.5vw, 5rem);
