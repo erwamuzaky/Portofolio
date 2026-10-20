@@ -242,7 +242,10 @@ try {
 
         <!-- ================= 2. ABOUT ================= -->
         <section id="about">
-            <h2>About Me</h2>
+            <div class="section-head">
+                <span class="section-label"><span class="section-balok" aria-hidden="true"></span>01 — About</span>
+                <h2>About Me</h2>
+            </div>
 
             <div class="about-grid reveal">
                 <div class="about-bio">
@@ -347,12 +350,18 @@ try {
 
         <!-- ================= 3. PROJECT ================= -->
         <section id="project">
-            <h2>My Project</h2>
+            <div class="section-head">
+                <span class="section-label"><span class="section-balok" aria-hidden="true"></span>02 — Project</span>
+                <h2>My Project</h2>
+            </div>
             <ul class="projects-grid">
                 <?php foreach ($daftarProject as $i => $proyek): ?>
-                <li class="project-card reveal" style="--delay: <?= min($i, 5) * 70 ?>ms">
+                <li class="project-bungkus reveal" style="--delay: <?= min($i, 5) * 70 ?>ms">
+                    <article class="project-card">
                     <?php if ($proyek['gambar']): ?>
-                    <img src="<?= esc($proyek['gambar']) ?>" alt="Tampilan <?= esc($proyek['judul']) ?>" class="project-img" loading="lazy">
+                    <div class="project-img-bungkus">
+                        <img src="<?= esc($proyek['gambar']) ?>" alt="Tampilan <?= esc($proyek['judul']) ?>" class="project-img" loading="lazy">
+                    </div>
                     <?php endif; ?>
                     <h3><?= esc($proyek['judul']) ?></h3>
                     <p><?= esc($proyek['deskripsi']) ?></p>
@@ -369,6 +378,7 @@ try {
                         <?php endif; ?>
                     </div>
                     <?php endif; ?>
+                    </article>
                 </li>
                 <?php endforeach; ?>
             </ul>
@@ -377,6 +387,7 @@ try {
         <!-- ================= 4. CONTACT ================= -->
         <section id="contact">
             <div class="contact-box reveal">
+                <span class="section-label"><span class="section-balok" aria-hidden="true"></span>03 — Contact</span>
                 <h2>Contact Me</h2>
                 <p><?= esc($contactPesan) ?></p>
 
