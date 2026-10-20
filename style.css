@@ -1821,18 +1821,20 @@ html.js .reveal.tampil {
     }
 }
 
-/* Kursor jaring sendiri (data-URI SVG 32x32, hotspot 16 16).
+/* Kursor jaring sendiri: garis putih, titik tengah merah, 32x32 hotspot 16 16.
    Hanya aktif di perangkat pointer halus dan bila gerak tidak dibatasi. */
 html.js-kursor,
-html.js-kursor a,
-html.js-kursor button,
-html.js-kursor .figur-tombol {
-    cursor: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDMyIDMyIj48ZyBmaWxsPSJub25lIiBzdHJva2U9IiM0ZjdkZmYiIHN0cm9rZS13aWR0aD0iMS4zIiBzdHJva2UtbGluZWNhcD0icm91bmQiPjxjaXJjbGUgY3g9IjE2IiBjeT0iMTYiIHI9IjE0LjUiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSI5LjUiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSI0LjUiLz48cGF0aCBkPSJNMTYgMS41djI5TTEuNSAxNmgyOU01LjggNS44bDIwLjQgMjAuNE0yNi4yIDUuOEw1LjggMjYuMiIvPjxwYXRoIGQ9Ik0xNiA2LjVhOS41IDkuNSAwIDAgMSA5LjUgOS41Ii8+PHBhdGggZD0iTTE2IDI1LjVBOS41IDkuNSAwIDAgMSA2LjUgMTYiLz48L2c+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMS4yIiBmaWxsPSIjNGY3ZGZmIi8+PC9zdmc+') 16 16, auto;
+html.js-kursor .figur-tumpuk {
+    cursor: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDMyIDMyIj48ZyBmaWxsPSJub25lIiBzdHJva2U9IiNmNGY3ZmQiIHN0cm9rZS13aWR0aD0iMS4zIiBzdHJva2UtbGluZWNhcD0icm91bmQiPjxjaXJjbGUgY3g9IjE2IiBjeT0iMTYiIHI9IjE0LjUiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSI5LjUiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSI0LjUiLz48cGF0aCBkPSJNMTYgMS41djI5TTEuNSAxNmgyOU01LjggNS44bDIwLjQgMjAuNE0yNi4yIDUuOEw1LjggMjYuMiIvPjxwYXRoIGQ9Ik0xNiA2LjVhOS41IDkuNSAwIDAgMSA5LjUgOS41Ii8+PHBhdGggZD0iTTE2IDI1LjVBOS41IDkuNSAwIDAgMSA2LjUgMTYiLz48L2c+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMS42IiBmaWxsPSIjZTIzNjM2Ii8+PC9zdmc+') 16 16, auto;
 }
 
-/* Reticle kecil mengikuti kursor hanya di atas figur (pojok kanan bawah). */
-html.js-kursor .figur-tumpuk {
-    cursor: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDMyIDMyIj48ZyBmaWxsPSJub25lIiBzdHJva2U9IiM0ZjdkZmYiIHN0cm9rZS13aWR0aD0iMS4zIiBzdHJva2UtbGluZWNhcD0icm91bmQiPjxjaXJjbGUgY3g9IjE2IiBjeT0iMTYiIHI9IjE0LjUiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSI5LjUiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSI0LjUiLz48cGF0aCBkPSJNMTYgMS41djI5TTEuNSAxNmgyOU01LjggNS44bDIwLjQgMjAuNE0yNi4yIDUuOEw1LjggMjYuMiIvPjwvZz48Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSIxLjIiIGZpbGw9IiM0ZjdkZmYiLz48L3N2Zz4=') 16 16, pointer;
+/* Varian ketiga: elemen yang bisa diklik, garis merah dan sedikit lebih besar. */
+html.js-kursor a,
+html.js-kursor button,
+html.js-kursor [role='button'],
+html.js-kursor label,
+html.js-kursor summary {
+    cursor: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNCIgaGVpZ2h0PSIzNCIgdmlld0JveD0iMCAwIDM0IDM0Ij48ZyBmaWxsPSJub25lIiBzdHJva2U9IiNlMjM2MzYiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiPjxjaXJjbGUgY3g9IjE3IiBjeT0iMTciIHI9IjE1LjUiLz48Y2lyY2xlIGN4PSIxNyIgY3k9IjE3IiByPSIxMC41Ii8+PGNpcmNsZSBjeD0iMTciIGN5PSIxNyIgcj0iNSIvPjxwYXRoIGQ9Ik0xNyAxLjV2MzFNMS41IDE3aDMxTTYgNmwyMiAyMk0yOCA2TDYgMjgiLz48cGF0aCBkPSJNMTcgNi41YTEwLjUgMTAuNSAwIDAgMSAxMC41IDEwLjUiLz48cGF0aCBkPSJNMTcgMjcuNUExMC41IDEwLjUgMCAwIDEgNi41IDE3Ii8+PC9nPjxjaXJjbGUgY3g9IjE3IiBjeT0iMTciIHI9IjEuNiIgZmlsbD0iI2Y0ZjdmZCIvPjwvc3ZnPg==') 17 17, pointer;
 }
 
 /* Efek klik: jaring kecil melebar dan memudar 400 ms. */
@@ -1843,7 +1845,7 @@ html.js-kursor .figur-tumpuk {
     margin: -6px 0 0 -6px;
     pointer-events: none;
     z-index: 9998;
-    border: 1.4px solid var(--blue-terang);
+    border: 1.4px solid var(--red);
     border-radius: 50%;
     animation: jaring-melebar 400ms ease-out forwards;
 }
@@ -2288,6 +2290,9 @@ nav a.aktif::after {
     html.js-kursor,
     html.js-kursor a,
     html.js-kursor button,
+    html.js-kursor [role='button'],
+    html.js-kursor label,
+    html.js-kursor summary,
     html.js-kursor .figur-tombol,
     html.js-kursor .figur-tumpuk {
         cursor: auto !important;
