@@ -27,6 +27,12 @@ try {
     $daftarSkill = db()->query('SELECT nama, ikon, kategori, deskripsi FROM skill ORDER BY urutan, id')->fetchAll();
     $daftarPendidikan = db()->query('SELECT nama, jurusan, tahun FROM pendidikan ORDER BY urutan, id')->fetchAll();
 
+    $pendidikanTerakhir = $daftarPendidikan ? end($daftarPendidikan) : null;
+    $posterPeran  = konten($pdo, 'hero', 'poster_peran', $aboutJurusan !== '' ? $aboutJurusan : 'Pelajar');
+    $posterFokus  = konten($pdo, 'hero', 'poster_fokus', $aboutFokus !== '' ? $aboutFokus : 'Web Development');
+    $posterWaktu  = konten($pdo, 'hero', 'poster_waktu', $pendidikanTerakhir['tahun'] ?? 'Sekarang');
+    $posterVertikal = konten($pdo, 'hero', 'poster_vertikal', 'PORTFOLIO — ' . strtoupper($heroNama));
+
     $hardSkills = array_filter($daftarSkill, fn ($s) => $s['kategori'] === 'hard');
     $softSkills = array_filter($daftarSkill, fn ($s) => $s['kategori'] === 'soft');
     $barisKeahlian = array_values(array_filter(explode('|', $aboutKeahlian)));
@@ -45,6 +51,7 @@ try {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Caveat:wght@600&display=swap">
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -115,28 +122,14 @@ try {
 
     <main>
 
-        <!-- ================= 1. HOME / HERO ================= -->
-        <section id="home" class="hero">
-            <div class="ornamen-laba" aria-hidden="true">
-                <svg viewBox="0 0 120 120" focusable="false">
-                    <g fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M52 62 Q34 52 22 62 Q30 46 20 36" />
-                        <path d="M50 70 Q30 66 20 78 Q26 60 16 52" />
-                        <path d="M52 78 Q34 82 26 96 Q30 78 20 72" />
-                        <path d="M56 84 Q46 98 44 112 Q40 96 34 90" />
-                        <path d="M68 62 Q86 52 98 62 Q90 46 100 36" />
-                        <path d="M70 70 Q90 66 100 78 Q94 60 104 52" />
-                        <path d="M68 78 Q86 82 94 96 Q90 78 100 72" />
-                        <path d="M64 84 Q74 98 76 112 Q80 96 86 90" />
-                    </g>
-                    <g fill="currentColor">
-                        <ellipse cx="60" cy="76" rx="15" ry="18" />
-                        <ellipse cx="60" cy="55" rx="11" ry="10" />
-                        <path d="M49 50 L44 44 M71 50 L76 44" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
-                    </g>
-                </svg>
-            </div>
-            <svg class="hero-jaring" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
+        <!-- ================= 1. HOME / HERO (POSTER) ================= -->
+        <?php
+        $bagianNama = preg_split('/\s+/', trim($heroNama), 2);
+        $namaBaris1 = $bagianNama[0] ?? $heroNama;
+        $namaBaris2 = $bagianNama[1] ?? '';
+        ?>
+        <section id="home" class="hero hero-poster">
+            <svg class="poster-jaring" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
                 <g fill="none" stroke="currentColor" stroke-width="1">
                     <circle cx="200" cy="200" r="40" />
                     <circle cx="200" cy="200" r="80" />
@@ -154,17 +147,69 @@ try {
                     <path d="M200 40 Q140 60 117 117 Q83 140 40 200" transform="rotate(270 200 200)" />
                 </g>
             </svg>
-            <div class="hero-text">
-                <p class="hero-sapaan"><?= esc($heroSapaan) ?></p>
-                <h1><?= esc($heroNama) ?></h1>
-                <p class="hero-desk"><?= esc($heroDesk) ?></p>
-                <div class="hero-buttons">
-                    <a href="#project" class="btn btn-primary">Lihat Project</a>
-                    <a href="#contact" class="btn btn-secondary">Hubungi Saya</a>
-                </div>
+
+            <svg class="poster-sinar" viewBox="0 0 300 220" aria-hidden="true" focusable="false">
+                <g stroke="currentColor" stroke-linecap="round" fill="none">
+                    <path d="M0 220 L120 60" stroke-width="2" />
+                    <path d="M18 220 L132 78" stroke-width="1.4" />
+                    <path d="M38 220 L146 96" stroke-width="1" />
+                    <path d="M0 190 L96 44" stroke-width="1.4" />
+                    <path d="M0 158 L72 30" stroke-width="1" />
+                </g>
+            </svg>
+
+            <div class="poster-kiri">
+                <p class="poster-sapaan"><?= esc($heroSapaan) ?></p>
             </div>
-            <div class="hero-image">
-                <img src="<?= esc($heroFoto) ?>" alt="Foto <?= esc($heroNama) ?>" class="profile-img">
+
+            <h1 class="poster-judul">
+                <span class="poster-baris1"><?= esc($namaBaris1) ?></span>
+                <?php if ($namaBaris2 !== ''): ?>
+                <span class="poster-script"><?= esc($namaBaris2) ?></span>
+                <?php endif; ?>
+                <span class="poster-baris2">Portofolio</span>
+            </h1>
+
+            <p class="poster-desk"><?= esc($heroDesk) ?></p>
+
+            <div class="hero-buttons poster-tombol">
+                <a href="#project" class="btn btn-primary">Lihat Project</a>
+                <a href="#contact" class="btn btn-secondary">Hubungi Saya</a>
+            </div>
+
+            <ul class="poster-label">
+                <li>
+                    <span class="poster-label-kunci">Role</span>
+                    <span class="poster-label-nilai"><?= esc($posterPeran) ?></span>
+                </li>
+                <li>
+                    <span class="poster-label-kunci">Focus</span>
+                    <span class="poster-label-nilai"><?= esc($posterFokus) ?></span>
+                </li>
+                <li>
+                    <span class="poster-label-kunci">Time</span>
+                    <span class="poster-label-nilai"><?= esc($posterWaktu) ?></span>
+                </li>
+            </ul>
+
+            <p class="poster-vertikal"><?= esc($posterVertikal) ?></p>
+
+            <div class="poster-figur" id="posterFigur">
+                <svg class="poster-reticle" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
+                    <g fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="200" cy="200" r="150" />
+                        <circle cx="200" cy="200" r="168" stroke-dasharray="10 14" stroke-width="1.2" />
+                        <path d="M200 30 L200 70 M200 330 L200 370 M30 200 L70 200 M330 200 L370 200" />
+                        <path d="M112 112 L136 136 M288 112 L264 136 M112 288 L136 264 M288 288 L264 264" stroke-width="1.4" />
+                    </g>
+                </svg>
+
+                <div class="figur-tumpuk" id="figurTumpuk">
+                    <img class="figur-topeng" src="foto/topeng.png" alt="Siluet figur bertopeng" width="600" height="800" loading="eager">
+                    <img class="figur-wajah" id="figurWajah" src="foto/wajah.png" alt="Foto wajah Erwa Muzaky" width="600" height="800" loading="eager">
+                </div>
+
+                <button type="button" class="figur-tombol" id="figurTombol" aria-label="Tukar tampilan antara topeng dan wajah" aria-pressed="false" hidden></button>
             </div>
         </section>
 
@@ -323,6 +368,9 @@ try {
     <footer>
         <p>&copy; <?= date('Y') ?> <?= esc($footerTeks) ?></p>
     </footer>
+
+    <script src="galeri.js"></script>
+    <script src="poster.js"></script>
 
 </body>
 

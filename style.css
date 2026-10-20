@@ -211,10 +211,6 @@ section h2::after {
     background: var(--red);
 }
 
-.hero-text h1 .nama-aksen {
-    color: var(--red);
-}
-
 :focus-visible {
     outline: 2px solid var(--blue-terang);
     outline-offset: 2px;
@@ -250,89 +246,9 @@ section h2::after {
     aspect-ratio: 1;
 }
 
-.ornamen-laba {
-    position: absolute;
-    z-index: 2;
-    pointer-events: none;
-    color: var(--red);
-    opacity: 0.85;
-}
-
 .hero {
     position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 3rem;
-    min-height: 78vh;
     padding-top: 8rem;
-}
-
-.hero-jaring {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    width: min(52vw, 560px);
-    aspect-ratio: 1;
-    z-index: -1;
-    opacity: 0.07;
-    color: var(--blue);
-    pointer-events: none;
-}
-
-.hero-text {
-    flex: 1;
-    min-width: 0;
-    position: relative;
-    z-index: 1;
-}
-
-.hero-text::before {
-    content: '';
-    position: absolute;
-    left: -90px;
-    top: -70px;
-    width: min(46vw, 520px);
-    aspect-ratio: 1;
-    z-index: -1;
-    opacity: 0.5;
-    pointer-events: none;
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Cg fill='none' stroke='%23e62429' stroke-width='1'%3E%3Ccircle cx='200' cy='200' r='50'/%3E%3Ccircle cx='200' cy='200' r='100'/%3E%3Ccircle cx='200' cy='200' r='150'/%3E%3Ccircle cx='200' cy='200' r='200'/%3E%3Cpath d='M200 0 L200 400 M0 200 L400 200'/%3E%3Cpath d='M200 50 Q250 65 275 105 Q305 125 350 200'/%3E%3Cpath d='M200 50 Q150 65 125 105 Q95 125 50 200'/%3E%3Cpath d='M350 200 Q335 250 295 275 Q275 305 200 350'/%3E%3Cpath d='M50 200 Q65 250 105 275 Q125 305 200 350'/%3E%3C/g%3E%3C/svg%3E");
-}
-
-.hero .ornamen-laba {
-    right: 52%;
-    top: 14%;
-    width: clamp(40px, 5vw, 68px);
-    animation: laba-turun 6s ease-in-out infinite;
-}
-
-@keyframes laba-turun {
-    0%, 100% { transform: translateY(0) rotate(-4deg); }
-    50% { transform: translateY(14px) rotate(4deg); }
-}
-
-.hero-sapaan {
-    color: var(--red);
-    font-weight: 600;
-    font-size: 0.95rem;
-    margin-bottom: 0.5rem;
-}
-
-.hero-text h1 {
-    font-size: 2.75rem;
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    margin-bottom: 1rem;
-}
-
-.hero-desk {
-    color: var(--muted);
-    font-size: 1.05rem;
-    margin-bottom: 1.8rem;
-    max-width: 42ch;
 }
 
 .hero-buttons {
@@ -341,17 +257,245 @@ section h2::after {
     gap: 12px;
 }
 
-.hero-image {
-    flex-shrink: 0;
+/* --- HERO POSTER: BEYOND THE MASK --- */
+.hero-poster {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    align-items: center;
+    gap: clamp(2rem, 5vw, 4.5rem);
+    min-height: 82vh;
+    overflow: hidden;
 }
 
-.profile-img {
-    width: 240px;
-    height: 240px;
-    object-fit: cover;
-    object-position: center top;
-    border-radius: 50%;
-    border: 1px solid var(--line-soft);
+.poster-jaring,
+.poster-sinar {
+    position: absolute;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.poster-jaring {
+    right: -6%;
+    top: 2%;
+    width: min(58vw, 640px);
+    aspect-ratio: 1;
+    color: var(--red);
+    opacity: 0.13;
+}
+
+.poster-sinar {
+    left: 30%;
+    bottom: 6%;
+    width: min(30vw, 320px);
+    color: var(--blue-terang);
+    opacity: 0.14;
+}
+
+.poster-kiri {
+    position: relative;
+}
+
+.poster-left {
+    position: relative;
+    z-index: 1;
+}
+
+.poster-sapaan {
+    display: inline-block;
+    color: var(--red);
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 0.9rem;
+    padding-left: 0.1rem;
+}
+
+.poster-judul {
+    display: flex;
+    flex-direction: column;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.4rem;
+}
+
+.poster-baris1,
+.poster-baris2 {
+    font-family: 'Anton', 'Plus Jakarta Sans', sans-serif;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+.poster-baris1 {
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    color: var(--text);
+}
+
+.poster-baris2 {
+    font-size: clamp(2.2rem, 6vw, 4.6rem);
+    color: transparent;
+    -webkit-text-stroke: 2px var(--red);
+    text-stroke: 2px var(--red);
+}
+
+.poster-script {
+    font-family: 'Caveat', cursive;
+    font-weight: 600;
+    font-size: clamp(2.6rem, 6.5vw, 5rem);
+    color: var(--red);
+    transform: rotate(-3deg);
+    transform-origin: left center;
+    margin: -0.35em 0 -0.15em 0.15em;
+    line-height: 1;
+}
+
+.poster-desk {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 44ch;
+    margin-bottom: 1.8rem;
+}
+
+.poster-tombol {
+    margin-bottom: 2rem;
+}
+
+.poster-label {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    list-style: none;
+    padding: 1.1rem 0 0;
+    margin: 0;
+    border-top: 1px solid var(--line);
+}
+
+.poster-label li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.poster-label-kunci {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--blue-terang);
+}
+
+.poster-label-nilai {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.poster-vertikal {
+    position: absolute;
+    left: 0;
+    bottom: 3rem;
+    transform: rotate(180deg);
+    writing-mode: vertical-rl;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--muted);
+    opacity: 0.55;
+    pointer-events: none;
+}
+
+.poster-figur {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+}
+
+.poster-reticle {
+    position: absolute;
+    width: min(88%, 460px);
+    aspect-ratio: 1;
+    color: var(--blue-terang);
+    opacity: 0.28;
+    pointer-events: none;
+    animation: reticle-putar 26s linear infinite;
+}
+
+@keyframes reticle-putar {
+    to { transform: rotate(360deg); }
+}
+
+.figur-tumpuk {
+    position: relative;
+    width: min(78%, 400px);
+    aspect-ratio: 3 / 4;
+}
+
+.figur-topeng,
+.figur-wajah {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: bottom center;
+}
+
+.figur-wajah {
+    -webkit-mask-image: radial-gradient(circle at var(--x, 50%) var(--y, 42%), #000 var(--r, 24%), transparent calc(var(--r, 24%) + 14%));
+    mask-image: radial-gradient(circle at var(--x, 50%) var(--y, 42%), #000 var(--r, 24%), transparent calc(var(--r, 24%) + 14%));
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    transition: opacity 0.3s ease;
+}
+
+.poster-figur.figur-halus .figur-wajah {
+    opacity: 1;
+}
+
+.poster-figur:not(.figur-halus) .figur-wajah {
+    opacity: 0;
+}
+
+.poster-figur.figur-aktif .figur-topeng {
+    opacity: 0.35;
+}
+
+.figur-tombol {
+    position: absolute;
+    left: 50%;
+    bottom: 0.4rem;
+    transform: translateX(-50%);
+    z-index: 2;
+    padding: 10px 20px;
+    min-height: 44px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+}
+
+.figur-tombol::after {
+    content: 'Tukar tampilan';
+}
+
+.figur-tombol:hover {
+    border-color: var(--blue-terang);
+    color: var(--blue-terang);
+}
+
+.figur-tombol[aria-pressed='true'] {
+    background: var(--red-soft);
+    border-color: var(--red);
+    color: var(--red);
 }
 
 /* --- TOMBOL --- */
@@ -1300,17 +1444,6 @@ body.admin {
         opacity: 0.045;
     }
 
-    .hero .ornamen-laba {
-        right: 4%;
-        top: 4%;
-    }
-
-    .hero-text::before {
-        left: -50px;
-        top: -40px;
-        opacity: 0.32;
-    }
-
     section h2::after {
         right: -28px;
         top: -12px;
@@ -1319,24 +1452,12 @@ body.admin {
     }
 
     .hero {
-        flex-direction: column-reverse;
         text-align: center;
-        gap: 1.75rem;
-        min-height: auto;
         padding-top: 7rem;
-    }
-
-    .hero-desk {
-        margin-left: auto;
-        margin-right: auto;
     }
 
     .hero-buttons {
         justify-content: center;
-    }
-
-    .hero-text h1 {
-        font-size: 2.1rem;
     }
 
     .contact-box {
@@ -1371,50 +1492,70 @@ body.admin {
     overflow: hidden;
 }
 
-.hero-bg {
-    position: absolute;
-    inset: 0;
-    z-index: -2;
-    pointer-events: none;
+@media (max-width: 1024px) {
+    .hero-poster {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+        min-height: auto;
+        padding-top: 7rem;
+        text-align: center;
+    }
+
+    .poster-desk {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .poster-tombol {
+        justify-content: center;
+    }
+
+    .poster-label {
+        justify-content: center;
+    }
+
+    .poster-vertikal {
+        display: none;
+    }
+
+    .figur-tumpuk {
+        width: min(64%, 320px);
+    }
+
+    .poster-jaring {
+        right: -14%;
+        top: -4%;
+        opacity: 0.1;
+    }
 }
 
-.hero-bg img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center 30%;
-    opacity: 0.28;
-    filter: saturate(1.15) contrast(1.05);
-}
+@media (max-width: 768px) {
+    .hero-poster {
+        padding-top: 6.5rem;
+        gap: 2rem;
+    }
 
-.hero-bg::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-        radial-gradient(120% 90% at 78% 40%, transparent 0%, var(--bg) 68%),
-        linear-gradient(180deg, rgba(11, 14, 21, 0.55) 0%, var(--bg) 100%);
-}
+    .poster-script {
+        margin-left: 0;
+        align-self: center;
+    }
 
-.hero-halftone {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    opacity: 0.5;
-    background-image: radial-gradient(var(--line) 1px, transparent 1.4px);
-    background-size: 14px 14px;
-    mask-image: linear-gradient(120deg, rgba(0, 0, 0, 0.7) 0%, transparent 45%, rgba(0, 0, 0, 0.55) 100%);
-}
+    .poster-judul {
+        align-items: center;
+    }
 
-.hero-text::after {
-    content: "";
-    display: block;
-    width: 68px;
-    height: 4px;
-    margin-top: 1.5rem;
-    background: linear-gradient(90deg, var(--red) 0%, var(--blue) 100%);
-    border-radius: 999px;
+    .poster-label {
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    .figur-tumpuk {
+        width: min(72%, 280px);
+    }
+
+    .poster-sinar {
+        display: none;
+    }
 }
 
 .section-lead {
@@ -1501,10 +1642,6 @@ body.admin {
 }
 
 @media (max-width: 768px) {
-    .hero-bg img {
-        opacity: 0.2;
-    }
-
     .galeri-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 0.75rem;
