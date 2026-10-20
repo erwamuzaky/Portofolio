@@ -110,21 +110,24 @@ INSERT INTO pendidikan (nama, jurusan, tahun, urutan) VALUES
 ('SDN 02 Sikapak Barat', 'Pendidikan Dasar', '2015 – 2021', 3);
 
 -- ========== SEED: ADMIN ==========
--- Password admin WAJIB diisi lewat variabel @ADMIN_PASS saat menjalankan file ini.
--- Tidak ada password default di repo. Setup akan GAGAL bila @ADMIN_PASS kosong.
--- Cara pakai:
---   mysql -uroot --default-character-set=utf8mb4 -e "SET @ADMIN_PASS='password_pilihanmu'; SOURCE setup.sql;"
+-- Tidak ada password default di repo. Setup akan GAGAL bila admin belum diisi.
+-- Dua cara mengisi akun admin:
+--   1. PALING AMAN (bcrypt): hitung hash dulu lewat PHP, lalu set sebagai @ADMIN_HASH.
+--        php buat_hash_admin.php "password_pilihanmu"
+--        mysql -uroot --default-character-set=utf8mb4 -e "SET @ADMIN_HASH='<hash_dari_perintah_di_atas>'; SOURCE setup.sql;"
+--   2. CEPAT (hash lama): set @ADMIN_PASS, nanti otomatis dinaikkan ke bcrypt saat login pertama.
+--        mysql -uroot --default-character-set=utf8mb4 -e "SET @ADMIN_PASS='password_pilihanmu'; SOURCE setup.sql;"
 -- Ganti password lewat menu Ganti Password di dashboard setelah login.
 DROP PROCEDURE IF EXISTS cek_password_admin;
 DELIMITER //
 CREATE PROCEDURE cek_password_admin()
 BEGIN
-    IF @ADMIN_PASS IS NULL OR @ADMIN_PASS = '' THEN
+    IF (@ADMIN_HASH IS NULL OR @ADMIN_HASH = '') AND (@ADMIN_PASS IS NULL OR @ADMIN_PASS = '') THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'ADMIN_PASS belum diisi. Jalankan: SET @ADMIN_PASS=... sebelum SOURCE setup.sql';
+        SET MESSAGE_TEXT = 'Admin belum diisi. Set @ADMIN_HASH (bcrypt) atau @ADMIN_PASS sebelum SOURCE setup.sql';
     END IF;
     INSERT INTO user (username, password) VALUES
-    ('admin', SHA2(@ADMIN_PASS, 256))
+    ('admin', IF(@ADMIN_HASH IS NULL OR @ADMIN_HASH = '', SHA2(@ADMIN_PASS, 256), @ADMIN_HASH))
     ON DUPLICATE KEY UPDATE username = username;
 END //
 DELIMITER ;

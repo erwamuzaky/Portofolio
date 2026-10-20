@@ -16,7 +16,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute([$username]);
     $hash = $stmt->fetchColumn();
 
-    if ($hash !== false && hash_equals((string) $hash, hash('sha256', $password))) {
+    $cocok = false;
+    $perluRehash = false;
+
+    if ($hash !== false && is_string($hash)) {
+        if (password_verify($password, $hash)) {
+            $cocok = true;
+            $perluRehash = password_needs_rehash($hash, PASSWORD_DEFAULT);
+        } elseif (preg_match('/^[0-9a-f]{64}$/i', $hash) === 1 && hash_equals(strtolower($hash), hash('sha256', $password))) {
+            // Hash lama (SHA-256) -> login sekali, lalu naikkan ke bcrypt.
+            $cocok = true;
+            $perluRehash = true;
+        }
+    }
+
+    if ($cocok) {
+        if ($perluRehash) {
+            $update = db()->prepare('UPDATE user SET password = ? WHERE username = ?');
+            $update->execute([password_hash($password, PASSWORD_DEFAULT), $username]);
+        }
         session_regenerate_id(true);
         $_SESSION['login'] = true;
         header('Location: index.php');
