@@ -1821,38 +1821,42 @@ html.js .reveal.tampil {
     }
 }
 
-.kursor-jaring {
+/* Kursor jaring sendiri (data-URI SVG 32x32, hotspot 16 16).
+   Hanya aktif di perangkat pointer halus dan bila gerak tidak dibatasi. */
+html.js-kursor,
+html.js-kursor a,
+html.js-kursor button,
+html.js-kursor .figur-tombol {
+    cursor: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDMyIDMyIj48ZyBmaWxsPSJub25lIiBzdHJva2U9IiM0ZjdkZmYiIHN0cm9rZS13aWR0aD0iMS4zIiBzdHJva2UtbGluZWNhcD0icm91bmQiPjxjaXJjbGUgY3g9IjE2IiBjeT0iMTYiIHI9IjE0LjUiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSI5LjUiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSI0LjUiLz48cGF0aCBkPSJNMTYgMS41djI5TTEuNSAxNmgyOU01LjggNS44bDIwLjQgMjAuNE0yNi4yIDUuOEw1LjggMjYuMiIvPjxwYXRoIGQ9Ik0xNiA2LjVhOS41IDkuNSAwIDAgMSA5LjUgOS41Ii8+PHBhdGggZD0iTTE2IDI1LjVBOS41IDkuNSAwIDAgMSA2LjUgMTYiLz48L2c+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMS4yIiBmaWxsPSIjNGY3ZGZmIi8+PC9zdmc+') 16 16, auto;
+}
+
+/* Reticle kecil mengikuti kursor hanya di atas figur (pojok kanan bawah). */
+html.js-kursor .figur-tumpuk {
+    cursor: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDMyIDMyIj48ZyBmaWxsPSJub25lIiBzdHJva2U9IiM0ZjdkZmYiIHN0cm9rZS13aWR0aD0iMS4zIiBzdHJva2UtbGluZWNhcD0icm91bmQiPjxjaXJjbGUgY3g9IjE2IiBjeT0iMTYiIHI9IjE0LjUiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSI5LjUiLz48Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSI0LjUiLz48cGF0aCBkPSJNMTYgMS41djI5TTEuNSAxNmgyOU01LjggNS44bDIwLjQgMjAuNE0yNi4yIDUuOEw1LjggMjYuMiIvPjwvZz48Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSIxLjIiIGZpbGw9IiM0ZjdkZmYiLz48L3N2Zz4=') 16 16, pointer;
+}
+
+/* Efek klik: jaring kecil melebar dan memudar 400 ms. */
+.jaring-klik {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 34px;
-    height: 34px;
-    margin: -17px 0 0 -17px;
+    width: 12px;
+    height: 12px;
+    margin: -6px 0 0 -6px;
     pointer-events: none;
-    z-index: 9999;
-    opacity: 0;
-    transition: opacity 0.2s ease, transform 0.08s linear;
-    color: var(--blue-terang);
-    will-change: transform;
+    z-index: 9998;
+    border: 1.4px solid var(--blue-terang);
+    border-radius: 50%;
+    animation: jaring-melebar 400ms ease-out forwards;
 }
 
-.kursor-jaring svg {
-    width: 100%;
-    height: 100%;
-    display: block;
-}
+@keyframes jaring-melebar {
+    0% {
+        opacity: 0.9;
+        transform: scale(0.4);
+    }
 
-html.js.kursor-aktif .kursor-jaring {
-    opacity: 0.85;
-}
-
-html.js.kursor-di-figur .kursor-jaring {
-    opacity: 0;
-}
-
-@media (pointer: coarse) {
-    .kursor-jaring {
-        display: none;
+    100% {
+        opacity: 0;
+        transform: scale(4);
     }
 }
 
@@ -2234,8 +2238,16 @@ nav a.aktif::after {
         opacity: 0.2;
     }
 
-    .kursor-jaring {
+    .jaring-klik {
         display: none !important;
+    }
+
+    html.js-kursor,
+    html.js-kursor a,
+    html.js-kursor button,
+    html.js-kursor .figur-tombol,
+    html.js-kursor .figur-tumpuk {
+        cursor: auto !important;
     }
 
     .loader-jaring {
