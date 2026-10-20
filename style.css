@@ -1752,6 +1752,53 @@ html.js.kursor-di-figur .kursor-jaring {
     }
 }
 
+.loader-jaring {
+    display: none;
+}
+
+html.js.loader-aktif .loader-jaring {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    background: var(--bg);
+    transition: opacity 0.5s ease;
+}
+
+html.js.loader-selesai .loader-jaring {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.loader-jaring svg {
+    width: min(58vw, 260px);
+    height: auto;
+}
+
+.loader-jaring .jalur-jaring {
+    fill: none;
+    stroke: var(--blue);
+    stroke-width: 2;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    transition: stroke-dashoffset 0.12s linear;
+}
+
+.loader-jaring .jalur-jaring.rajut {
+    stroke: var(--blue-terang);
+}
+
+.loader-jaring .angka-loader {
+    font-family: 'Anton', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.08em;
+    color: var(--red);
+}
+
 @media (prefers-reduced-motion: reduce) {
     html {
         scroll-behavior: auto;
@@ -1769,6 +1816,10 @@ html.js.kursor-di-figur .kursor-jaring {
     }
 
     .kursor-jaring {
+        display: none !important;
+    }
+
+    .loader-jaring {
         display: none !important;
     }
 
