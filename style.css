@@ -1887,7 +1887,7 @@ html.js.loader-aktif .loader-jaring {
     justify-content: center;
     gap: 1.25rem;
     background: var(--bg);
-    transition: opacity 0.5s ease;
+    transition: opacity 300ms ease;
 }
 
 html.js.loader-selesai .loader-jaring {
@@ -1909,7 +1909,15 @@ html.js.loader-selesai .loader-jaring {
     transition: stroke-dashoffset 0.12s linear;
 }
 
+.loader-jaring .jalur-lingkaran {
+    stroke: var(--blue-terang);
+}
+
 .loader-jaring .jalur-jaring.rajut {
+    stroke: var(--blue-terang);
+}
+
+.loader-jaring .jalur-lingkaran.rajut {
     stroke: var(--blue-terang);
 }
 
@@ -1918,6 +1926,7 @@ html.js.loader-selesai .loader-jaring {
     font-size: 1.5rem;
     letter-spacing: 0.08em;
     color: var(--red);
+    text-shadow: 0 0 8px rgba(226, 54, 54, 0.75), 0 0 24px rgba(226, 54, 54, 0.45);
 }
 
 /* ==========================================
