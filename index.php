@@ -162,37 +162,37 @@ try {
 
             <div class="poster-kiri">
                 <p class="poster-sapaan"><?= esc($heroSapaan) ?></p>
+
+                <h1 class="poster-judul">
+                    <span class="poster-baris1"><?= esc($namaBaris1) ?></span>
+                    <?php if ($namaBaris2 !== ''): ?>
+                    <span class="poster-script"><?= esc($namaBaris2) ?></span>
+                    <?php endif; ?>
+                    <span class="poster-baris2">Portofolio</span>
+                </h1>
+
+                <p class="poster-desk"><?= esc($heroDesk) ?></p>
+
+                <div class="hero-buttons poster-tombol">
+                    <a href="#project" class="btn btn-primary">Lihat Project</a>
+                    <a href="#contact" class="btn btn-secondary">Hubungi Saya</a>
+                </div>
+
+                <ul class="poster-label">
+                    <li>
+                        <span class="poster-label-kunci">Role</span>
+                        <span class="poster-label-nilai"><?= esc($posterPeran) ?></span>
+                    </li>
+                    <li>
+                        <span class="poster-label-kunci">Focus</span>
+                        <span class="poster-label-nilai"><?= esc($posterFokus) ?></span>
+                    </li>
+                    <li>
+                        <span class="poster-label-kunci">Time</span>
+                        <span class="poster-label-nilai"><?= esc($posterWaktu) ?></span>
+                    </li>
+                </ul>
             </div>
-
-            <h1 class="poster-judul">
-                <span class="poster-baris1"><?= esc($namaBaris1) ?></span>
-                <?php if ($namaBaris2 !== ''): ?>
-                <span class="poster-script"><?= esc($namaBaris2) ?></span>
-                <?php endif; ?>
-                <span class="poster-baris2">Portofolio</span>
-            </h1>
-
-            <p class="poster-desk"><?= esc($heroDesk) ?></p>
-
-            <div class="hero-buttons poster-tombol">
-                <a href="#project" class="btn btn-primary">Lihat Project</a>
-                <a href="#contact" class="btn btn-secondary">Hubungi Saya</a>
-            </div>
-
-            <ul class="poster-label">
-                <li>
-                    <span class="poster-label-kunci">Role</span>
-                    <span class="poster-label-nilai"><?= esc($posterPeran) ?></span>
-                </li>
-                <li>
-                    <span class="poster-label-kunci">Focus</span>
-                    <span class="poster-label-nilai"><?= esc($posterFokus) ?></span>
-                </li>
-                <li>
-                    <span class="poster-label-kunci">Time</span>
-                    <span class="poster-label-nilai"><?= esc($posterWaktu) ?></span>
-                </li>
-            </ul>
 
             <p class="poster-vertikal"><?= esc($posterVertikal) ?></p>
 
