@@ -543,6 +543,51 @@ section h2::after {
     color: var(--red);
 }
 
+/* Layar pendek: rapatkan hero agar judul, tombol, label, dan figur muat satu layar */
+@media (max-height: 720px) and (min-width: 1025px) {
+    .hero-poster {
+        padding-top: 4.5rem;
+        padding-bottom: 0.75rem;
+        gap: clamp(1.5rem, 3vw, 3rem);
+    }
+
+    .poster-sapaan {
+        margin-bottom: 0.5rem;
+    }
+
+    .poster-judul {
+        margin-bottom: 0.8rem;
+    }
+
+    .poster-baris1 {
+        font-size: clamp(2.2rem, 5vw, 3.6rem);
+    }
+
+    .poster-baris2 {
+        font-size: clamp(1.7rem, 3.8vw, 2.8rem);
+    }
+
+    .poster-script {
+        font-size: clamp(1.9rem, 4.2vw, 3rem);
+    }
+
+    .poster-desk {
+        margin-bottom: 1rem;
+    }
+
+    .poster-tombol {
+        margin-bottom: 1.2rem;
+    }
+
+    .poster-label {
+        padding-top: 0.6rem;
+    }
+
+    .figur-tumpuk {
+        width: min(78%, 420px);
+    }
+}
+
 /* --- TOMBOL --- */
 .btn {
     display: inline-block;
