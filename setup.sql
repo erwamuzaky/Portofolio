@@ -110,7 +110,23 @@ INSERT INTO pendidikan (nama, jurusan, tahun, urutan) VALUES
 ('SDN 02 Sikapak Barat', 'Pendidikan Dasar', '2015 – 2021', 3);
 
 -- ========== SEED: ADMIN ==========
--- Username: admin  Password: admin123 (ganti lewat dashboard setelah login)
-INSERT INTO user (username, password) VALUES
-('admin', SHA2('admin123', 256))
-ON DUPLICATE KEY UPDATE username = username;
+-- Password admin WAJIB diisi lewat variabel @ADMIN_PASS saat menjalankan file ini.
+-- Tidak ada password default di repo. Setup akan GAGAL bila @ADMIN_PASS kosong.
+-- Cara pakai:
+--   mysql -uroot --default-character-set=utf8mb4 -e "SET @ADMIN_PASS='password_pilihanmu'; SOURCE setup.sql;"
+-- Ganti password lewat menu Ganti Password di dashboard setelah login.
+DROP PROCEDURE IF EXISTS cek_password_admin;
+DELIMITER //
+CREATE PROCEDURE cek_password_admin()
+BEGIN
+    IF @ADMIN_PASS IS NULL OR @ADMIN_PASS = '' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'ADMIN_PASS belum diisi. Jalankan: SET @ADMIN_PASS=... sebelum SOURCE setup.sql';
+    END IF;
+    INSERT INTO user (username, password) VALUES
+    ('admin', SHA2(@ADMIN_PASS, 256))
+    ON DUPLICATE KEY UPDATE username = username;
+END //
+DELIMITER ;
+CALL cek_password_admin();
+DROP PROCEDURE cek_password_admin;

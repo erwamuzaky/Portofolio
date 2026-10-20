@@ -216,7 +216,7 @@ section h2::after {
 }
 
 :focus-visible {
-    outline: 2px solid var(--blue);
+    outline: 2px solid var(--blue-terang);
     outline-offset: 2px;
     border-radius: 4px;
 }

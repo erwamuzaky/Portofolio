@@ -23,8 +23,8 @@ start "" "http://localhost:8000/"
 echo.
 echo   Halaman publik : http://localhost:8000/
 echo   Dashboard admin: http://localhost:8000/admin/
-echo   Login admin    : username admin / password admin123
-echo   (ganti password lewat menu Ganti Password di dashboard)
+echo   Login admin    : username admin
+echo   (password diisi saat setup.sql dijalankan, ganti lewat menu Ganti Password)
 echo.
 echo Server berjalan. Jangan tutup jendela ini selama memakai situs.
 echo Tekan Ctrl+C lalu tutup jendela untuk berhenti.
