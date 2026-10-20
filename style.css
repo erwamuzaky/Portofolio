@@ -2094,21 +2094,44 @@ nav a.aktif::after {
     position: relative;
     max-width: var(--max);
     margin: 0 auto;
-    padding: 0 1.5rem;
+    padding: 22px 1.5rem 0;
 }
 
-/* --- Elemen gelantungan di navbar --- */
+/* --- Elemen gelantungan di navbar (laba-laba SVG orisinal) --- */
 .gelantungan {
     position: absolute;
     top: 0;
     left: 50%;
-    width: clamp(48px, 6vw, 84px);
-    height: auto;
-    transform-origin: 50% 0%;
+    width: 30px;
+    height: 26px;
     translate: -50% 0;
     pointer-events: none;
     z-index: 2;
+    color: var(--blue-terang);
+    transform-origin: 50% 0%;
     animation: gelantungan-ayun 6s ease-in-out infinite;
+}
+
+.gelantungan-benang {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 1px;
+    height: 13px;
+    margin-left: -0.5px;
+    background: currentColor;
+    opacity: 0.7;
+}
+
+.gelantungan-laba {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    width: 30px;
+    height: 14px;
+    translate: -50% 0;
+    display: block;
+    opacity: 0.85;
 }
 
 @keyframes gelantungan-ayun {
