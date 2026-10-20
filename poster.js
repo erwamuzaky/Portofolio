@@ -36,7 +36,7 @@
             return;
         }
         rafBelum = true;
-        window.requestAnimationFrame(terapkan);
+        window.requestAnimationFrame(animasiLembut);
     }
 
     function setTampil(nilai) {
@@ -66,14 +66,14 @@
             targetRadius = 26 + kepadatan * 16;
             setTampil(true);
         } else {
-            targetRadius = 24;
+            targetRadius = 0;
             setTampil(false);
         }
         minta();
     }
 
     function padaKeluar() {
-        targetRadius = 20;
+        targetRadius = 0;
         setTampil(false);
         minta();
     }
@@ -83,10 +83,11 @@
     }
 
     function animasiLembut() {
+        rafBelum = false;
         if (Math.abs(radius - targetRadius) > 0.15) {
             radius = radius + (targetRadius - radius) * 0.18;
             terapkan();
-            window.requestAnimationFrame(animasiLembut);
+            minta();
         } else {
             radius = targetRadius;
             terapkan();
@@ -101,7 +102,7 @@
         figur.addEventListener('pointermove', padaGerak, { passive: true });
         figur.addEventListener('pointerenter', padaMasuk, { passive: true });
         figur.addEventListener('pointerleave', padaKeluar, { passive: true });
-        window.requestAnimationFrame(animasiLembut);
+        minta();
     }
 
     function aktifkanModeTap() {
