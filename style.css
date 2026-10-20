@@ -2218,9 +2218,35 @@ nav a.aktif::after {
     }
 }
 
+@media (min-width: 1100px) {
+    .poster-label {
+        display: grid;
+        grid-template-columns: repeat(3, auto);
+        gap: 20px;
+    }
+
+    .poster-label-nilai {
+        font-size: 0.95rem;
+    }
+}
+
 @media (max-height: 700px) {
     .poster-judul {
         margin-bottom: 0.7rem;
+    }
+
+    .poster-baris1,
+    .poster-baris2 {
+        font-size: clamp(2.1rem, 5.7vw, 4.4rem);
+    }
+
+    .poster-script {
+        font-size: clamp(1.15rem, 2.3vw, 1.95rem);
+    }
+
+    .hero-poster {
+        padding-top: 4rem;
+        padding-bottom: 0.5rem;
     }
 
     .poster-desk {
