@@ -95,10 +95,10 @@ header {
     position: fixed;
     top: 0;
     width: 100%;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--line-soft);
+    background: rgba(9, 11, 18, 0.82);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(79, 125, 255, 0.28);
     z-index: 100;
 }
 
@@ -110,7 +110,7 @@ nav {
 }
 
 nav a {
-    color: var(--muted);
+    color: var(--blue-terang);
     text-decoration: none;
     font-weight: 600;
     font-size: 0.92rem;
@@ -121,7 +121,7 @@ nav a {
 
 nav a:hover,
 nav a:focus-visible {
-    color: var(--red);
+    color: #ffffff;
     background: var(--blue-soft);
 }
 
