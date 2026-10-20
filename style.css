@@ -1836,6 +1836,19 @@ html.js.kursor-di-figur .kursor-jaring {
     display: none;
 }
 
+html.js.loader-aktif body {
+    overflow: hidden;
+}
+
+html.js.loader-aktif :is(header, main, footer, .ornamen-jaring) {
+    opacity: 0;
+}
+
+html.js.loader-selesai :is(header, main, footer, .ornamen-jaring) {
+    opacity: 1;
+    transition: opacity 0.45s ease;
+}
+
 html.js.loader-aktif .loader-jaring {
     position: fixed;
     inset: 0;
