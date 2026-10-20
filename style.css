@@ -1612,7 +1612,8 @@ body.admin {
 
 html.js .reveal {
     opacity: 0;
-    transform: translateY(28px);
+    transform: translateY(28px) rotate(-1.6deg);
+    transform-origin: 50% 100%;
 }
 
 html.js .reveal.tampil {
