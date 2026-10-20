@@ -792,17 +792,56 @@ section h2::after {
 }
 
 .project-card {
+    position: relative;
     background: var(--surface);
-    border: 1px solid var(--line-soft);
-    border-radius: var(--radius);
+    border: 2px solid var(--blue);
+    border-radius: 0;
     padding: 1.25rem;
     display: flex;
     flex-direction: column;
-    transition: border-color 0.2s ease;
+    clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
+    box-shadow: 6px 6px 0 0 var(--blue);
+    overflow: hidden;
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
 }
 
-.project-card:hover {
-    border-color: var(--red);
+.project-card::before {
+    content: "";
+    position: absolute;
+    inset: 4px;
+    border: 1px solid var(--blue-soft);
+    clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+    pointer-events: none;
+}
+
+.project-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    background-image:
+        repeating-linear-gradient(45deg, transparent 0 14px, var(--blue-soft) 14px 15px),
+        repeating-linear-gradient(-45deg, transparent 0 14px, var(--blue-soft) 14px 15px);
+    background-size: 200% 200%;
+    background-position: center;
+}
+
+.project-card:hover,
+html.js .project-card.reveal.tampil:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 9px 9px 0 0 var(--blue);
+    border-color: var(--blue-terang);
+}
+
+.project-card:hover::after {
+    opacity: 0.35;
+}
+
+.project-card > * {
+    position: relative;
+    z-index: 1;
 }
 
 .project-img {
@@ -1638,7 +1677,6 @@ html.js .reveal.tampil {
     backdrop-filter: blur(4px);
 }
 
-.project-card,
 .skill-card,
 .soft-card,
 .timeline-card,
@@ -1646,7 +1684,6 @@ html.js .reveal.tampil {
     transition: transform 0.25s ease, border-color 0.25s ease;
 }
 
-.project-card:hover,
 .skill-card:hover,
 .soft-card:hover,
 .timeline-card:hover,
