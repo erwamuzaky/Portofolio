@@ -531,6 +531,7 @@ html.js .poster-vertikal.vertikal-tampil {
     bottom: 0.4rem;
     transform: translateX(-50%);
     z-index: 2;
+    display: none;
     padding: 10px 20px;
     min-height: 44px;
     border-radius: var(--radius-sm);
@@ -542,6 +543,12 @@ html.js .poster-vertikal.vertikal-tampil {
     font-weight: 600;
     cursor: pointer;
     transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .figur-tombol:not([hidden]) {
+        display: block;
+    }
 }
 
 .figur-tombol::after {
