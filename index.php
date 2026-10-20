@@ -82,22 +82,7 @@ try {
         <div class="header-dalam">
             <div class="gelantungan" aria-hidden="true">
                 <span class="gelantungan-benang"></span>
-                <svg class="gelantungan-laba" viewBox="0 0 40 44" focusable="false">
-                    <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M18 22 Q10 18 5 22 Q9 15 4 10" />
-                        <path d="M17 25 Q8 24 3 29 Q6 20 2 16" />
-                        <path d="M18 28 Q10 30 6 36 Q9 27 4 24" />
-                        <path d="M19 31 Q15 37 14 43 Q12 36 9 33" />
-                        <path d="M24 22 Q32 18 37 22 Q33 15 38 10" />
-                        <path d="M25 25 Q34 24 39 29 Q36 20 40 16" />
-                        <path d="M24 28 Q32 30 36 36 Q33 27 38 24" />
-                        <path d="M23 31 Q27 37 28 43 Q30 36 33 33" />
-                    </g>
-                    <g fill="currentColor">
-                        <ellipse cx="21" cy="27" rx="5" ry="6.5" />
-                        <ellipse cx="21" cy="20" rx="3.6" ry="3.2" />
-                    </g>
-                </svg>
+                <img class="gelantungan-laba" src="foto/elements/gelantungan.webp" alt="" width="240" height="320" loading="eager" decoding="async">
             </div>
             <nav aria-label="Navigasi utama">
                 <a href="#home">Home</a>

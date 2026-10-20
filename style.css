@@ -2142,17 +2142,15 @@ nav a.aktif::after {
     padding: 22px 1.5rem 0;
 }
 
-/* --- Elemen gelantungan di navbar (laba-laba SVG orisinal) --- */
+/* --- Elemen gelantungan di navbar (gambar jaring, alfa dipertahankan) --- */
 .gelantungan {
     position: absolute;
     top: 0;
-    left: 50%;
-    width: 30px;
-    height: 26px;
-    translate: -50% 0;
+    left: clamp(24px, 13vw, 200px);
+    width: 90px;
+    height: 120px;
     pointer-events: none;
     z-index: 2;
-    color: var(--blue-terang);
     transform-origin: 50% 0%;
     animation: gelantungan-ayun 6s ease-in-out infinite;
 }
@@ -2162,9 +2160,9 @@ nav a.aktif::after {
     top: 0;
     left: 50%;
     width: 1px;
-    height: 13px;
+    height: 14px;
     margin-left: -0.5px;
-    background: currentColor;
+    background: var(--blue-terang);
     opacity: 0.7;
 }
 
@@ -2172,11 +2170,12 @@ nav a.aktif::after {
     position: absolute;
     top: 12px;
     left: 50%;
-    width: 30px;
-    height: 14px;
+    width: 90px;
+    height: 106px;
     translate: -50% 0;
     display: block;
-    opacity: 0.85;
+    object-fit: contain;
+    opacity: 0.9;
 }
 
 @keyframes gelantungan-ayun {
