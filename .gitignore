@@ -4,8 +4,10 @@ Spiderman/
 # Cadangan database
 backup_*.sql
 
-# Berkas kerja desain
-design-demos/
+# Berkas kerja desain: hanya dokumen inti yang dilacak
+design-demos/*
+!design-demos/brand-spec.md
+!design-demos/spec.md
 
 # Berkas kerja tool (bukan bagian project)
 .omo/
@@ -14,8 +16,9 @@ design-demos/
 # Arsip berkas lama / sekali pakai
 arsip/
 
-# Perkakas lokal Python (tidak ikut server/Git)
-tools/
+# Perkakas lokal Python: hanya pemeriksa halaman yang dilacak
+tools/*
+!tools/cek_halaman.py
 
 # Kredensial database: pakai config.contoh.php sebagai acuan
 config.php
