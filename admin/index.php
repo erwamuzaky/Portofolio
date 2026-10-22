@@ -222,6 +222,37 @@ $judulSection = [
     'contact' => 'Bagian Kontak',
     'footer' => 'Bagian Footer',
 ];
+$labelKonten = [
+    'sapaan' => 'Sapaan pembuka',
+    'nama' => 'Nama yang ditampilkan',
+    'deskripsi' => 'Deskripsi singkat',
+    'foto' => 'Path foto profil',
+    'poster_peran' => 'Peran pada poster',
+    'paragraf_pembuka' => 'Paragraf pembuka About',
+    'keahlian' => 'Daftar keahlian',
+    'paragraf_organisasi' => 'Paragraf organisasi',
+    'paragraf_penutup' => 'Paragraf penutup About',
+    'lokasi' => 'Alamat atau lokasi',
+    'jurusan' => 'Jurusan',
+    'fokus' => 'Fokus belajar',
+    'maps_src' => 'URL embed Google Maps',
+    'kutipan_kartu' => 'Kutipan kartu identitas',
+    'peta_wilayah' => 'Nama wilayah pada peta',
+    'peta_provinsi' => 'Provinsi pada peta',
+    'peta_lokasi' => 'Lokasi singkat di bawah peta',
+    'peta_status' => 'Status pada peta',
+    'peta_marker' => 'Label penanda lokasi',
+    'peta_perairan' => 'Label perairan',
+    'email' => 'Email kontak',
+    'pesan' => 'Pesan kontak',
+    'teks' => 'Teks footer',
+];
+
+$bantuanKonten = [
+    'keahlian' => 'Pisahkan tiap keahlian dengan tanda |.',
+    'foto' => 'Contoh: foto/foto.jpeg',
+    'maps_src' => 'Tempel URL embed Google Maps yang diawali https://.',
+];
 
 $sosial = $pdo->query('SELECT * FROM sosial ORDER BY urutan, id')->fetchAll();
 $projects = $pdo->query('SELECT * FROM project ORDER BY urutan, id')->fetchAll();
@@ -229,6 +260,15 @@ $skills = $pdo->query('SELECT * FROM skill ORDER BY kategori, urutan, id')->fetc
 $pendidikan = $pdo->query('SELECT * FROM pendidikan ORDER BY urutan, id')->fetchAll();
 $pengalaman = $pdo->query('SELECT * FROM pengalaman ORDER BY urutan, id')->fetchAll();
 $sertifikat = $pdo->query('SELECT * FROM sertifikat ORDER BY urutan, id')->fetchAll();
+
+$ringkasan = [
+    ['href' => '#project', 'label' => 'Project', 'jumlah' => count($projects), 'highlight' => true],
+    ['href' => '#skill', 'label' => 'Skill', 'jumlah' => count($skills), 'highlight' => false],
+    ['href' => '#sosial', 'label' => 'Link Sosial', 'jumlah' => count($sosial), 'highlight' => false],
+    ['href' => '#pendidikan', 'label' => 'Pendidikan', 'jumlah' => count($pendidikan), 'highlight' => false],
+    ['href' => '#pengalaman', 'label' => 'Pengalaman', 'jumlah' => count($pengalaman), 'highlight' => false],
+    ['href' => '#sertifikat', 'label' => 'Sertifikat', 'jumlah' => count($sertifikat), 'highlight' => false],
+];
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -258,38 +298,49 @@ $sertifikat = $pdo->query('SELECT * FROM sertifikat ORDER BY urutan, id')->fetch
             </div>
 
             <nav class="admin-nav" aria-label="Menu admin">
-                <a href="#konten">
-                    <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
-                    Konten Teks
-                </a>
-                <a href="#sosial">
-                    <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>
-                    Link Sosial
-                </a>
-                <a href="#project">
-                    <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18"/></svg>
-                    Project
-                </a>
-                <a href="#skill">
-                    <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg>
-                    Skill
-                </a>
-                <a href="#pendidikan">
-                    <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1 3 3 6 3s6-2 6-3v-5"/></svg>
-                    Pendidikan
-                </a>
-                <a href="#pengalaman">
-                    <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3h12v18H6z"/><path d="M9 7h6M9 11h6M9 15h4"/></svg>
-                    Pengalaman
-                </a>
-                <a href="#sertifikat">
-                    <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="9" r="5"/><path d="m8.5 13-1.5 8 5-3 5 3-1.5-8"/></svg>
-                    Sertifikat
-                </a>
-                <a href="#password">
-                    <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
-                    Ganti Password
-                </a>
+                <div class="admin-nav-grup">
+                    <p class="admin-nav-label">Konten</p>
+                    <a href="#konten">
+                        <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+                        <span class="nav-teks">Konten Teks</span>
+                    </a>
+                    <a href="#sosial">
+                        <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>
+                        <span class="nav-teks">Link Sosial</span>
+                    </a>
+                </div>
+
+                <div class="admin-nav-grup">
+                    <p class="admin-nav-label">Portofolio</p>
+                    <a href="#project">
+                        <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18"/></svg>
+                        <span class="nav-teks">Project</span>
+                    </a>
+                    <a href="#skill">
+                        <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg>
+                        <span class="nav-teks">Skill</span>
+                    </a>
+                    <a href="#pendidikan">
+                        <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1 3 3 6 3s6-2 6-3v-5"/></svg>
+                        <span class="nav-teks">Pendidikan</span>
+                    </a>
+                    <a href="#pengalaman">
+                        <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3h12v18H6z"/><path d="M9 7h6M9 11h6M9 15h4"/></svg>
+                        <span class="nav-teks">Pengalaman</span>
+                    </a>
+                    <a href="#sertifikat">
+                        <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="9" r="5"/><path d="m8.5 13-1.5 8 5-3 5 3-1.5-8"/></svg>
+                        <span class="nav-teks">Sertifikat</span>
+                    </a>
+                </div>
+
+                <div class="admin-nav-grup">
+                    <p class="admin-nav-label">Akun</p>
+                    <a href="#password">
+                        <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+                        <span class="nav-teks">Ganti Password</span>
+                    </a>
+                </div>
             </nav>
 
             <div class="sidebar-foot">
@@ -307,10 +358,15 @@ $sertifikat = $pdo->query('SELECT * FROM sertifikat ORDER BY urutan, id')->fetch
         <main class="admin-content">
 
             <div class="admin-topbar">
-                <div>
-                    <h1>Dashboard</h1>
-                    <p>Kelola isi portofolio kamu dari sini. Perubahan langsung tampil di halaman publik.</p>
+                <div class="admin-topbar-teks">
+                    <p class="admin-eyebrow">Panel Admin</p>
+                    <h1>Dashboard Konten</h1>
+                    <p class="admin-subjudul">Kelola isi portofolio dari satu tempat. Setiap perubahan langsung tampil di halaman publik.</p>
                 </div>
+                <a class="topbar-link" href="../index.php" target="_blank" rel="noopener">
+                    Lihat situs
+                    <span aria-hidden="true">↗</span>
+                </a>
             </div>
 
             <?php if ($pesan): ?>
@@ -320,61 +376,53 @@ $sertifikat = $pdo->query('SELECT * FROM sertifikat ORDER BY urutan, id')->fetch
             <p class="pesan galat" role="alert"><?= esc($galat) ?></p>
             <?php endif; ?>
 
-            <div class="stat-grid">
-                <div class="stat-card highlight">
-                    <span class="stat-num"><?= count($projects) ?></span>
-                    <span class="stat-label">Project</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-num"><?= count($skills) ?></span>
-                    <span class="stat-label">Skill</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-num"><?= count($sosial) ?></span>
-                    <span class="stat-label">Link Sosial</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-num"><?= count($pendidikan) ?></span>
-                    <span class="stat-label">Pendidikan</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-num"><?= count($pengalaman) ?></span>
-                    <span class="stat-label">Pengalaman</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-num"><?= count($sertifikat) ?></span>
-                    <span class="stat-label">Sertifikat</span>
-                </div>
+            <div class="stat-grid" aria-label="Ringkasan jumlah konten">
+                <?php foreach ($ringkasan as $stat): ?>
+                <a class="stat-card<?= $stat['highlight'] ? ' highlight' : '' ?>" href="<?= esc($stat['href']) ?>" aria-label="Lihat <?= esc($stat['label']) ?>">
+                    <span class="stat-num"><?= (int) $stat['jumlah'] ?></span>
+                    <span class="stat-label"><?= esc($stat['label']) ?></span>
+                    <span class="stat-arrow" aria-hidden="true">↗</span>
+                </a>
+                <?php endforeach; ?>
             </div>
 
             <section class="panel" id="konten">
                 <div class="panel-head">
                     <h2>Konten Teks</h2>
-                    <span class="panel-hint">Teks hero, about, kontak, footer</span>
+                    <span class="panel-hint">Teks hero, about, kontak, footer, dan peta</span>
                 </div>
+                <p class="panel-deskripsi">Setiap bagian dikelompokkan agar lebih mudah dicari. Buka atau tutup bagian sesuai kebutuhan.</p>
                 <?php foreach ($judulSection as $section => $judul): ?>
                 <?php if (empty($kontenPerSection[$section])) continue; ?>
-                <h3 class="panel-sub"><?= esc($judul) ?></h3>
-                <form method="post" class="form form-2kolom">
-                    <?= csrf_field() ?>
-                    <input type="hidden" name="aksi" value="simpan_konten">
-                    <input type="hidden" name="section" value="<?= esc($section) ?>">
-                    <?php foreach ($kontenPerSection[$section] as $baris): ?>
-                    <div class="<?= strlen($baris['nilai']) > 90 ? 'lebar-penuh' : '' ?>">
-                        <label for="k<?= $baris['id'] ?>"><?= esc(str_replace('_', ' ', $baris['kunci'])) ?></label>
-                        <?php if (strlen($baris['nilai']) > 90): ?>
-                        <textarea id="k<?= $baris['id'] ?>" name="nilai[<?= $baris['id'] ?>]" rows="3"><?= esc($baris['nilai']) ?></textarea>
-                        <?php else: ?>
-                        <input type="text" id="k<?= $baris['id'] ?>" name="nilai[<?= $baris['id'] ?>]" value="<?= esc($baris['nilai']) ?>">
-                        <?php endif; ?>
-                    </div>
-                    <?php endforeach; ?>
-                    <div class="form-aksi lebar-penuh">
-                        <button type="submit" class="btn btn-primary">Simpan <?= esc($judul) ?></button>
-                    </div>
-                </form>
+                <details class="grup-konten" open>
+                    <summary class="grup-konten-kepala">
+                        <span class="grup-konten-judul"><?= esc($judul) ?></span>
+                        <span class="grup-konten-meta"><?= count($kontenPerSection[$section]) ?> field</span>
+                        <span class="ringkas-chevron" aria-hidden="true"></span>
+                    </summary>
+                    <form method="post" class="form form-2kolom">
+                        <?= csrf_field() ?>
+                        <input type="hidden" name="aksi" value="simpan_konten">
+                        <input type="hidden" name="section" value="<?= esc($section) ?>">
+                        <?php foreach ($kontenPerSection[$section] as $baris): ?>
+                        <div class="<?= strlen($baris['nilai']) > 90 ? 'lebar-penuh' : '' ?>">
+                            <label for="k<?= $baris['id'] ?>"><?= esc($labelKonten[$baris['kunci']] ?? ucfirst(str_replace('_', ' ', $baris['kunci']))) ?></label>
+                            <?php if (strlen($baris['nilai']) > 90): ?>
+                            <textarea id="k<?= $baris['id'] ?>" name="nilai[<?= $baris['id'] ?>]" rows="3"><?= esc($baris['nilai']) ?></textarea>
+                            <?php else: ?>
+                            <input type="text" id="k<?= $baris['id'] ?>" name="nilai[<?= $baris['id'] ?>]" value="<?= esc($baris['nilai']) ?>">
+                            <?php endif; ?>
+                            <?php if (isset($bantuanKonten[$baris['kunci']])): ?>
+                            <p class="field-help"><?= esc($bantuanKonten[$baris['kunci']]) ?></p>
+                            <?php endif; ?>
+                        </div>
+                        <?php endforeach; ?>
+                        <div class="form-aksi lebar-penuh">
+                            <button type="submit" class="btn btn-primary">Simpan <?= esc($judul) ?></button>
+                        </div>
+                    </form>
+                </details>
                 <?php endforeach; ?>
-                <p class="catatan">Untuk daftar keahlian di About, pisahkan tiap baris dengan tanda <code>|</code>.</p>
             </section>
 
             <section class="panel" id="sosial">
@@ -383,65 +431,79 @@ $sertifikat = $pdo->query('SELECT * FROM sertifikat ORDER BY urutan, id')->fetch
                     <span class="panel-hint"><?= count($sosial) ?> tautan</span>
                 </div>
 
+                <?php if (!$sosial): ?>
+                <p class="kosong">Belum ada link sosial. Buka form tambah untuk membuat yang pertama.</p>
+                <?php endif; ?>
+
                 <?php foreach ($sosial as $item): ?>
-                <div class="entri">
-                    <div class="entri-kepala">
-                        <h3><span class="nomor"><?= esc((string) $item['urutan']) ?></span><?= esc($item['nama']) ?></h3>
+                <details class="entri">
+                    <summary class="entri-kepala">
+                        <span class="entri-judul"><span class="nomor"><?= esc((string) $item['urutan']) ?></span><span class="entri-nama"><?= esc($item['nama']) ?></span></span>
+                        <span class="entri-toggle">Edit</span>
+                    </summary>
+                    <div class="entri-isi">
+                        <form method="post" class="form">
+                            <?= csrf_field() ?>
+                            <input type="hidden" name="aksi" value="ubah_sosial">
+                            <input type="hidden" name="id" value="<?= $item['id'] ?>">
+                            <div class="form-2kolom">
+                                <div>
+                                    <label for="sn<?= $item['id'] ?>">Nama</label>
+                                    <input type="text" id="sn<?= $item['id'] ?>" name="nama" value="<?= esc($item['nama']) ?>" required>
+                                </div>
+                                <div>
+                                    <label for="so<?= $item['id'] ?>">Urutan</label>
+                                    <input type="number" id="so<?= $item['id'] ?>" name="urutan" value="<?= (int) $item['urutan'] ?>">
+                                </div>
+                                <div class="lebar-penuh">
+                                    <label for="su<?= $item['id'] ?>">URL</label>
+                                    <input type="url" id="su<?= $item['id'] ?>" name="url" value="<?= esc($item['url']) ?>" required>
+                                </div>
+                            </div>
+                            <div class="form-aksi">
+                                <button type="submit" class="btn btn-secondary">Simpan</button>
+                                <span class="spacer"></span>
+                            </div>
+                        </form>
+                        <form method="post" class="form-aksi" onsubmit="return confirm('Hapus link ini?')">
+                            <?= csrf_field() ?>
+                            <input type="hidden" name="aksi" value="hapus_sosial">
+                            <input type="hidden" name="id" value="<?= $item['id'] ?>">
+                            <button type="submit" class="btn btn-danger">Hapus</button>
+                        </form>
                     </div>
-                    <form method="post" class="form">
-                        <?= csrf_field() ?>
-                        <input type="hidden" name="aksi" value="ubah_sosial">
-                        <input type="hidden" name="id" value="<?= $item['id'] ?>">
-                        <div class="form-2kolom">
-                            <div>
-                                <label for="sn<?= $item['id'] ?>">Nama</label>
-                                <input type="text" id="sn<?= $item['id'] ?>" name="nama" value="<?= esc($item['nama']) ?>" required>
-                            </div>
-                            <div>
-                                <label for="so<?= $item['id'] ?>">Urutan</label>
-                                <input type="number" id="so<?= $item['id'] ?>" name="urutan" value="<?= (int) $item['urutan'] ?>">
-                            </div>
-                            <div class="lebar-penuh">
-                                <label for="su<?= $item['id'] ?>">URL</label>
-                                <input type="url" id="su<?= $item['id'] ?>" name="url" value="<?= esc($item['url']) ?>" required>
-                            </div>
-                        </div>
-                        <div class="form-aksi">
-                            <button type="submit" class="btn btn-secondary">Simpan</button>
-                            <span class="spacer"></span>
-                        </div>
-                    </form>
-                    <form method="post" class="form-aksi" onsubmit="return confirm('Hapus link ini?')">
-                        <?= csrf_field() ?>
-                        <input type="hidden" name="aksi" value="hapus_sosial">
-                        <input type="hidden" name="id" value="<?= $item['id'] ?>">
-                        <button type="submit" class="btn btn-danger">Hapus</button>
-                    </form>
-                </div>
+                </details>
                 <?php endforeach; ?>
 
-                <h3 class="panel-sub">Tambah Link Sosial</h3>
-                <form method="post" class="form">
-                    <?= csrf_field() ?>
-                    <input type="hidden" name="aksi" value="tambah_sosial">
-                    <div class="form-2kolom">
-                        <div>
-                            <label for="sns-baru">Nama</label>
-                            <input type="text" id="sns-baru" name="nama" placeholder="TikTok" required>
-                        </div>
-                        <div>
-                            <label for="sos-baru">Urutan</label>
-                            <input type="number" id="sos-baru" name="urutan" value="0">
-                        </div>
-                        <div class="lebar-penuh">
-                            <label for="sus-baru">URL</label>
-                            <input type="url" id="sus-baru" name="url" placeholder="https://tiktok.com/username" required>
-                        </div>
+                <details class="entri entri-tambah">
+                    <summary class="entri-kepala">
+                        <span class="entri-judul"><span class="tombol-plus" aria-hidden="true">+</span><span class="entri-nama">Tambah Link Sosial</span></span>
+                        <span class="entri-toggle">Buka</span>
+                    </summary>
+                    <div class="entri-isi">
+                        <form method="post" class="form">
+                            <?= csrf_field() ?>
+                            <input type="hidden" name="aksi" value="tambah_sosial">
+                            <div class="form-2kolom">
+                                <div>
+                                    <label for="sns-baru">Nama</label>
+                                    <input type="text" id="sns-baru" name="nama" placeholder="TikTok" required>
+                                </div>
+                                <div>
+                                    <label for="sos-baru">Urutan</label>
+                                    <input type="number" id="sos-baru" name="urutan" value="0">
+                                </div>
+                                <div class="lebar-penuh">
+                                    <label for="sus-baru">URL</label>
+                                    <input type="url" id="sus-baru" name="url" placeholder="https://tiktok.com/username" required>
+                                </div>
+                            </div>
+                            <div class="form-aksi">
+                                <button type="submit" class="btn btn-primary">Tambah Link</button>
+                            </div>
+                        </form>
                     </div>
-                    <div class="form-aksi">
-                        <button type="submit" class="btn btn-primary">Tambah Link</button>
-                    </div>
-                </form>
+                </details>
             </section>
 
             <section class="panel" id="project">
@@ -449,15 +511,20 @@ $sertifikat = $pdo->query('SELECT * FROM sertifikat ORDER BY urutan, id')->fetch
                     <h2>Project</h2>
                     <span class="panel-hint"><?= count($projects) ?> project</span>
                 </div>
+                <?php if (!$projects): ?>
+                <p class="kosong">Belum ada project. Buka form tambah untuk membuat yang pertama.</p>
+                <?php endif; ?>
 
                 <?php foreach ($projects as $item): ?>
-                <div class="entri">
-                    <div class="entri-kepala">
-                        <h3><span class="nomor"><?= esc((string) $item['urutan']) ?></span><?= esc($item['judul']) ?></h3>
+                <details class="entri">
+                    <summary class="entri-kepala">
+                        <span class="entri-judul"><span class="nomor"><?= esc((string) $item['urutan']) ?></span><span class="entri-nama"><?= esc($item['judul']) ?></span></span>
                         <?php if ($item['tag']): ?>
                         <span class="badge biru"><?= esc($item['tag']) ?></span>
                         <?php endif; ?>
-                    </div>
+                        <span class="entri-toggle">Edit</span>
+                    </summary>
+                    <div class="entri-isi">
                     <form method="post" class="form" enctype="multipart/form-data">
                         <?= csrf_field() ?>
                         <input type="hidden" name="aksi" value="ubah_project">
@@ -517,12 +584,18 @@ $sertifikat = $pdo->query('SELECT * FROM sertifikat ORDER BY urutan, id')->fetch
                         <input type="hidden" name="aksi" value="hapus_project">
                         <input type="hidden" name="id" value="<?= $item['id'] ?>">
                         <button type="submit" class="btn btn-danger">Hapus Project</button>
-                    </form>
-                </div>
+                        </form>
+                    </div>
+                </details>
                 <?php endforeach; ?>
 
-                <h3 class="panel-sub">Tambah Project</h3>
-                <form method="post" class="form" enctype="multipart/form-data">
+                <details class="entri entri-tambah">
+                    <summary class="entri-kepala">
+                        <span class="entri-judul"><span class="tombol-plus" aria-hidden="true">+</span><span class="entri-nama">Tambah Project</span></span>
+                        <span class="entri-toggle">Buka</span>
+                    </summary>
+                    <div class="entri-isi">
+                    <form method="post" class="form" enctype="multipart/form-data">
                     <?= csrf_field() ?>
                     <input type="hidden" name="aksi" value="tambah_project">
                     <div class="form-2kolom">
@@ -574,7 +647,9 @@ $sertifikat = $pdo->query('SELECT * FROM sertifikat ORDER BY urutan, id')->fetch
                     <div class="form-aksi">
                         <button type="submit" class="btn btn-primary">Tambah Project</button>
                     </div>
-                </form>
+                    </form>
+                    </div>
+                </details>
             </section>
 
             <section class="panel" id="skill">
@@ -582,13 +657,18 @@ $sertifikat = $pdo->query('SELECT * FROM sertifikat ORDER BY urutan, id')->fetch
                     <h2>Skill</h2>
                     <span class="panel-hint"><?= count($skills) ?> skill</span>
                 </div>
+                <?php if (!$skills): ?>
+                <p class="kosong">Belum ada skill. Tambahkan hard skill atau soft skill dari form di bawah.</p>
+                <?php endif; ?>
 
                 <?php foreach ($skills as $item): ?>
-                <div class="entri">
-                    <div class="entri-kepala">
-                        <h3><span class="nomor"><?= esc((string) $item['urutan']) ?></span><?= esc($item['nama']) ?></h3>
+                <details class="entri">
+                    <summary class="entri-kepala">
+                        <span class="entri-judul"><span class="nomor"><?= esc((string) $item['urutan']) ?></span><span class="entri-nama"><?= esc($item['nama']) ?></span></span>
                         <span class="badge <?= $item['kategori'] === 'hard' ? 'merah' : 'biru' ?>"><?= esc($item['kategori']) ?></span>
-                    </div>
+                        <span class="entri-toggle">Edit</span>
+                    </summary>
+                    <div class="entri-isi">
                     <form method="post" class="form">
                         <?= csrf_field() ?>
                         <input type="hidden" name="aksi" value="ubah_skill">
@@ -628,12 +708,18 @@ $sertifikat = $pdo->query('SELECT * FROM sertifikat ORDER BY urutan, id')->fetch
                         <input type="hidden" name="aksi" value="hapus_skill">
                         <input type="hidden" name="id" value="<?= $item['id'] ?>">
                         <button type="submit" class="btn btn-danger">Hapus</button>
-                    </form>
-                </div>
+                        </form>
+                    </div>
+                </details>
                 <?php endforeach; ?>
 
-                <h3 class="panel-sub">Tambah Skill</h3>
-                <form method="post" class="form">
+                <details class="entri entri-tambah">
+                    <summary class="entri-kepala">
+                        <span class="entri-judul"><span class="tombol-plus" aria-hidden="true">+</span><span class="entri-nama">Tambah Skill</span></span>
+                        <span class="entri-toggle">Buka</span>
+                    </summary>
+                    <div class="entri-isi">
+                    <form method="post" class="form">
                     <?= csrf_field() ?>
                     <input type="hidden" name="aksi" value="tambah_skill">
                     <div class="form-2kolom">
@@ -664,7 +750,9 @@ $sertifikat = $pdo->query('SELECT * FROM sertifikat ORDER BY urutan, id')->fetch
                     <div class="form-aksi">
                         <button type="submit" class="btn btn-primary">Tambah Skill</button>
                     </div>
-                </form>
+                    </form>
+                    </div>
+                </details>
             </section>
 
             <section class="panel" id="pendidikan">
@@ -672,35 +760,40 @@ $sertifikat = $pdo->query('SELECT * FROM sertifikat ORDER BY urutan, id')->fetch
                     <h2>Riwayat Pendidikan</h2>
                     <span class="panel-hint"><?= count($pendidikan) ?> riwayat</span>
                 </div>
+                <?php if (!$pendidikan): ?>
+                <p class="kosong">Belum ada riwayat pendidikan. Tambahkan data pertama dari form di bawah.</p>
+                <?php endif; ?>
 
                 <?php foreach ($pendidikan as $item): ?>
-                <div class="entri">
-                    <div class="entri-kepala">
-                        <h3><span class="nomor"><?= esc((string) $item['urutan']) ?></span><?= esc($item['nama']) ?></h3>
+                <details class="entri">
+                    <summary class="entri-kepala">
+                        <span class="entri-judul"><span class="nomor"><?= esc((string) $item['urutan']) ?></span><span class="entri-nama"><?= esc($item['nama']) ?></span></span>
                         <?php if ($item['tahun']): ?>
                         <span class="badge biru"><?= esc($item['tahun']) ?></span>
                         <?php endif; ?>
-                    </div>
+                        <span class="entri-toggle">Edit</span>
+                    </summary>
+                    <div class="entri-isi">
                     <form method="post" class="form">
                         <?= csrf_field() ?>
                         <input type="hidden" name="aksi" value="ubah_pendidikan">
                         <input type="hidden" name="id" value="<?= $item['id'] ?>">
                         <div class="form-2kolom">
                             <div class="lebar-penuh">
-                                <label for="pn<?= $item['id'] ?>">Nama Sekolah</label>
-                                <input type="text" id="pn<?= $item['id'] ?>" name="nama" value="<?= esc($item['nama']) ?>" required>
+                                <label for="pdn<?= $item['id'] ?>">Nama Sekolah</label>
+                                <input type="text" id="pdn<?= $item['id'] ?>" name="nama" value="<?= esc($item['nama']) ?>" required>
                             </div>
                             <div>
-                                <label for="pj<?= $item['id'] ?>">Jurusan / Jenjang</label>
-                                <input type="text" id="pj<?= $item['id'] ?>" name="jurusan" value="<?= esc($item['jurusan']) ?>">
+                                <label for="pdj<?= $item['id'] ?>">Jurusan / Jenjang</label>
+                                <input type="text" id="pdj<?= $item['id'] ?>" name="jurusan" value="<?= esc($item['jurusan']) ?>">
                             </div>
                             <div>
-                                <label for="pt<?= $item['id'] ?>">Tahun</label>
-                                <input type="text" id="pt<?= $item['id'] ?>" name="tahun" value="<?= esc($item['tahun']) ?>">
+                                <label for="pdt<?= $item['id'] ?>">Tahun</label>
+                                <input type="text" id="pdt<?= $item['id'] ?>" name="tahun" value="<?= esc($item['tahun']) ?>">
                             </div>
                             <div>
-                                <label for="pu<?= $item['id'] ?>">Urutan</label>
-                                <input type="number" id="pu<?= $item['id'] ?>" name="urutan" value="<?= (int) $item['urutan'] ?>">
+                                <label for="pdu<?= $item['id'] ?>">Urutan</label>
+                                <input type="number" id="pdu<?= $item['id'] ?>" name="urutan" value="<?= (int) $item['urutan'] ?>">
                             </div>
                         </div>
                         <div class="form-aksi">
@@ -713,36 +806,44 @@ $sertifikat = $pdo->query('SELECT * FROM sertifikat ORDER BY urutan, id')->fetch
                         <input type="hidden" name="aksi" value="hapus_pendidikan">
                         <input type="hidden" name="id" value="<?= $item['id'] ?>">
                         <button type="submit" class="btn btn-danger">Hapus</button>
-                    </form>
-                </div>
+                        </form>
+                    </div>
+                </details>
                 <?php endforeach; ?>
 
-                <h3 class="panel-sub">Tambah Pendidikan</h3>
-                <form method="post" class="form">
+                <details class="entri entri-tambah">
+                    <summary class="entri-kepala">
+                        <span class="entri-judul"><span class="tombol-plus" aria-hidden="true">+</span><span class="entri-nama">Tambah Pendidikan</span></span>
+                        <span class="entri-toggle">Buka</span>
+                    </summary>
+                    <div class="entri-isi">
+                    <form method="post" class="form">
                     <?= csrf_field() ?>
                     <input type="hidden" name="aksi" value="tambah_pendidikan">
                     <div class="form-2kolom">
                         <div class="lebar-penuh">
-                            <label for="pn-baru">Nama Sekolah</label>
-                            <input type="text" id="pn-baru" name="nama" required>
+                            <label for="pdn-baru">Nama Sekolah</label>
+                            <input type="text" id="pdn-baru" name="nama" required>
                         </div>
                         <div>
-                            <label for="pj-baru">Jurusan / Jenjang</label>
-                            <input type="text" id="pj-baru" name="jurusan">
+                            <label for="pdj-baru">Jurusan / Jenjang</label>
+                            <input type="text" id="pdj-baru" name="jurusan">
                         </div>
                         <div>
-                            <label for="pt-baru">Tahun</label>
-                            <input type="text" id="pt-baru" name="tahun" placeholder="2024 – 2027">
+                            <label for="pdt-baru">Tahun</label>
+                            <input type="text" id="pdt-baru" name="tahun" placeholder="2024 – 2027">
                         </div>
                         <div>
-                            <label for="pu-baru">Urutan</label>
-                            <input type="number" id="pu-baru" name="urutan" value="0">
+                            <label for="pdu-baru">Urutan</label>
+                            <input type="number" id="pdu-baru" name="urutan" value="0">
                         </div>
                     </div>
                     <div class="form-aksi">
                         <button type="submit" class="btn btn-primary">Tambah Pendidikan</button>
                     </div>
-                </form>
+                    </form>
+                    </div>
+                </details>
             </section>
 
             <section class="panel" id="pengalaman">
@@ -750,15 +851,20 @@ $sertifikat = $pdo->query('SELECT * FROM sertifikat ORDER BY urutan, id')->fetch
                     <h2>Pengalaman & Organisasi</h2>
                     <span class="panel-hint"><?= count($pengalaman) ?> pengalaman</span>
                 </div>
+                <?php if (!$pengalaman): ?>
+                <p class="kosong">Belum ada pengalaman. Tambahkan organisasi atau kegiatan pertama dari form di bawah.</p>
+                <?php endif; ?>
 
                 <?php foreach ($pengalaman as $item): ?>
-                <div class="entri">
-                    <div class="entri-kepala">
-                        <h3><span class="nomor"><?= esc((string) $item['urutan']) ?></span><?= esc($item['nama']) ?></h3>
+                <details class="entri">
+                    <summary class="entri-kepala">
+                        <span class="entri-judul"><span class="nomor"><?= esc((string) $item['urutan']) ?></span><span class="entri-nama"><?= esc($item['nama']) ?></span></span>
                         <?php if ($item['peran']): ?>
                         <span class="badge merah"><?= esc($item['peran']) ?></span>
                         <?php endif; ?>
-                    </div>
+                        <span class="entri-toggle">Edit</span>
+                    </summary>
+                    <div class="entri-isi">
                     <form method="post" class="form">
                         <?= csrf_field() ?>
                         <input type="hidden" name="aksi" value="ubah_pengalaman">
@@ -795,12 +901,18 @@ $sertifikat = $pdo->query('SELECT * FROM sertifikat ORDER BY urutan, id')->fetch
                         <input type="hidden" name="aksi" value="hapus_pengalaman">
                         <input type="hidden" name="id" value="<?= $item['id'] ?>">
                         <button type="submit" class="btn btn-danger">Hapus</button>
-                    </form>
-                </div>
+                        </form>
+                    </div>
+                </details>
                 <?php endforeach; ?>
 
-                <h3 class="panel-sub">Tambah Pengalaman</h3>
-                <form method="post" class="form">
+                <details class="entri entri-tambah">
+                    <summary class="entri-kepala">
+                        <span class="entri-judul"><span class="tombol-plus" aria-hidden="true">+</span><span class="entri-nama">Tambah Pengalaman</span></span>
+                        <span class="entri-toggle">Buka</span>
+                    </summary>
+                    <div class="entri-isi">
+                    <form method="post" class="form">
                     <?= csrf_field() ?>
                     <input type="hidden" name="aksi" value="tambah_pengalaman">
                     <div class="form-2kolom">
@@ -828,7 +940,9 @@ $sertifikat = $pdo->query('SELECT * FROM sertifikat ORDER BY urutan, id')->fetch
                     <div class="form-aksi">
                         <button type="submit" class="btn btn-primary">Tambah Pengalaman</button>
                     </div>
-                </form>
+                    </form>
+                    </div>
+                </details>
             </section>
 
             <section class="panel" id="sertifikat">
@@ -836,15 +950,20 @@ $sertifikat = $pdo->query('SELECT * FROM sertifikat ORDER BY urutan, id')->fetch
                     <h2>Sertifikat</h2>
                     <span class="panel-hint"><?= count($sertifikat) ?> sertifikat</span>
                 </div>
+                <?php if (!$sertifikat): ?>
+                <p class="kosong">Belum ada sertifikat. Unggah dokumen pendukung dari form di bawah.</p>
+                <?php endif; ?>
 
                 <?php foreach ($sertifikat as $item): ?>
-                <div class="entri">
-                    <div class="entri-kepala">
-                        <h3><span class="nomor"><?= esc((string) $item['urutan']) ?></span><?= esc($item['nama']) ?></h3>
+                <details class="entri">
+                    <summary class="entri-kepala">
+                        <span class="entri-judul"><span class="nomor"><?= esc((string) $item['urutan']) ?></span><span class="entri-nama"><?= esc($item['nama']) ?></span></span>
                         <?php if ($item['tahun']): ?>
                         <span class="badge biru"><?= esc($item['tahun']) ?></span>
                         <?php endif; ?>
-                    </div>
+                        <span class="entri-toggle">Edit</span>
+                    </summary>
+                    <div class="entri-isi">
                     <form method="post" class="form" enctype="multipart/form-data">
                         <?= csrf_field() ?>
                         <input type="hidden" name="aksi" value="ubah_sertifikat">
@@ -894,12 +1013,18 @@ $sertifikat = $pdo->query('SELECT * FROM sertifikat ORDER BY urutan, id')->fetch
                         <input type="hidden" name="aksi" value="hapus_sertifikat">
                         <input type="hidden" name="id" value="<?= $item['id'] ?>">
                         <button type="submit" class="btn btn-danger">Hapus</button>
-                    </form>
-                </div>
+                        </form>
+                    </div>
+                </details>
                 <?php endforeach; ?>
 
-                <h3 class="panel-sub">Tambah Sertifikat</h3>
-                <form method="post" class="form" enctype="multipart/form-data">
+                <details class="entri entri-tambah">
+                    <summary class="entri-kepala">
+                        <span class="entri-judul"><span class="tombol-plus" aria-hidden="true">+</span><span class="entri-nama">Tambah Sertifikat</span></span>
+                        <span class="entri-toggle">Buka</span>
+                    </summary>
+                    <div class="entri-isi">
+                    <form method="post" class="form" enctype="multipart/form-data">
                     <?= csrf_field() ?>
                     <input type="hidden" name="aksi" value="tambah_sertifikat">
                     <div class="form-2kolom">
@@ -935,7 +1060,9 @@ $sertifikat = $pdo->query('SELECT * FROM sertifikat ORDER BY urutan, id')->fetch
                     <div class="form-aksi">
                         <button type="submit" class="btn btn-primary">Tambah Sertifikat</button>
                     </div>
-                </form>
+                    </form>
+                    </div>
+                </details>
             </section>
 
             <section class="panel" id="password">
@@ -965,6 +1092,97 @@ $sertifikat = $pdo->query('SELECT * FROM sertifikat ORDER BY urutan, id')->fetch
         </main>
 
     </div>
+
+    <script>
+    (() => {
+        document.querySelectorAll('details.entri').forEach((detail) => {
+            const label = detail.querySelector(':scope > summary .entri-toggle');
+            if (!label) return;
+
+            const labelAwal = label.textContent.trim();
+            detail.addEventListener('toggle', () => {
+                label.textContent = detail.open ? 'Tutup' : labelAwal;
+            });
+        });
+    })();
+
+    (() => {
+        const nav = document.querySelector('.admin-nav');
+        if (!nav) return;
+
+        const tautan = Array.from(nav.querySelectorAll('a[href^="#"]'));
+        const bagian = tautan
+            .map((link) => document.querySelector(link.getAttribute('href')))
+            .filter(Boolean);
+
+        if (!bagian.length) return;
+
+        const setAktif = (id) => {
+            tautan.forEach((link) => {
+                const aktif = link.getAttribute('href') === '#' + id;
+                link.classList.toggle('aktif', aktif);
+                if (aktif) {
+                    link.setAttribute('aria-current', 'location');
+                } else {
+                    link.removeAttribute('aria-current');
+                }
+            });
+        };
+
+        let sedangKlik = false;
+        tautan.forEach((link) => {
+            link.addEventListener('click', () => {
+                setAktif(link.getAttribute('href').slice(1));
+                sedangKlik = true;
+                window.setTimeout(() => {
+                    sedangKlik = false;
+                }, 600);
+            });
+        });
+
+        const diDasar = () => window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 8;
+
+        const aktifkanTerakhir = () => {
+            if (sedangKlik || !diDasar()) return;
+            setAktif(bagian[bagian.length - 1].id);
+        };
+
+        if ('IntersectionObserver' in window) {
+            const pengamat = new IntersectionObserver((entries) => {
+                if (sedangKlik) return;
+                if (diDasar()) {
+                    setAktif(bagian[bagian.length - 1].id);
+                    return;
+                }
+                const terlihat = entries
+                    .filter((entry) => entry.isIntersecting)
+                    .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+                if (terlihat[0]) setAktif(terlihat[0].target.id);
+            }, {
+                rootMargin: '-15% 0px -65% 0px',
+                threshold: [0, 0.1, 0.5],
+            });
+
+            bagian.forEach((section) => pengamat.observe(section));
+        } else {
+            const perbarui = () => {
+                const posisi = window.scrollY + window.innerHeight * 0.25;
+                let aktif = bagian[0];
+                bagian.forEach((section) => {
+                    if (section.offsetTop <= posisi) aktif = section;
+                });
+                setAktif(aktif.id);
+            };
+
+            window.addEventListener('scroll', perbarui, { passive: true });
+            perbarui();
+        }
+
+        window.addEventListener('scroll', aktifkanTerakhir, { passive: true });
+        aktifkanTerakhir();
+        setAktif(bagian[0].id);
+    })();
+    </script>
 
 </body>
 
