@@ -394,7 +394,7 @@ section[id] { scroll-margin-top: 64px; }
 .face-toggle {
   position: absolute;
   left: -18px;
-  top: 10px;
+  top: -38px;
   z-index: 3;
   display: flex;
   background: var(--paper);
@@ -594,18 +594,18 @@ section[id] { scroll-margin-top: 64px; }
 
 .side-card .side-sticker {
   position: relative;
-  padding: 16px 14px 6px;
+  padding: 0 0 8px;
   text-align: center;
   border-top: 1px solid var(--line);
 }
 
-.side-card .side-sticker img { width: 100px; margin: 0 auto -2px; }
-
 .side-card .side-sticker p {
-  margin: 0;
+  margin: 12px 14px 0;
   font-family: var(--mono);
-  font-size: 8px;
-  text-transform: uppercase;
+  font-size: 9px;
+  line-height: 1.5;
+  text-transform: none;
+  letter-spacing: .01em;
 }
 
 /* Keahlian */
@@ -1167,7 +1167,7 @@ dialog::backdrop { background: rgba(20, 20, 20, .62); backdrop-filter: blur(3px)
 
   .stamp { width: 92px; height: 92px; font-size: 7px; left: 0; bottom: 58px; }
 
-  .face-toggle { left: 0; top: 4px; }
+  .face-toggle { left: 0; top: -38px; }
 
   .stats { grid-template-columns: 1fr; margin-top: 18px; }
 
@@ -1225,3 +1225,431 @@ dialog::backdrop { background: rgba(20, 20, 20, .62); backdrop-filter: blur(3px)
 
   .to-top { width: 42px; height: 42px; }
 }
+
+/* =========================================================
+   Gerak dan aksen Spider-Man
+   ========================================================= */
+
+.hero {
+  position: relative;
+}
+
+.web {
+  position: absolute;
+  z-index: 0;
+  color: var(--ink);
+  opacity: .2;
+  pointer-events: none;
+}
+
+.web--tl {
+  top: 24px;
+  left: -112px;
+  width: 300px;
+  height: 300px;
+}
+
+.web--br {
+  right: 0;
+  top: 168px;
+  width: 250px;
+  height: 250px;
+  opacity: .16;
+  transform: rotate(180deg);
+}
+
+.hero-kicker,
+.hero-grid,
+.stats {
+  position: relative;
+  z-index: 1;
+}
+
+/* Jaring digambar sekali saat halaman dibuka. */
+@media (prefers-reduced-motion: no-preference) {
+  .web path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: web-draw 1.25s cubic-bezier(.22, .61, .36, 1) forwards;
+  }
+
+  .web path:nth-child(1) {
+    animation-delay: .04s;
+  }
+
+  .web path:nth-child(2) {
+    animation-delay: .1s;
+  }
+
+  .web path:nth-child(3) {
+    animation-delay: .16s;
+  }
+
+  .web path:nth-child(4) {
+    animation-delay: .22s;
+  }
+
+  .web path:nth-child(5) {
+    animation-delay: .28s;
+  }
+
+  .web path:nth-child(6) {
+    animation-delay: .34s;
+  }
+
+  .web path:nth-child(7) {
+    animation-delay: .4s;
+  }
+
+  .web path:nth-child(8) {
+    animation-delay: .46s;
+  }
+
+  .web path:nth-child(9) {
+    animation-delay: .52s;
+  }
+}
+
+@keyframes web-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Headline masuk per baris. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero h1 span {
+    opacity: 0;
+    animation: hero-rise .72s cubic-bezier(.2, .7, .2, 1) both;
+  }
+
+  .hero h1 span:nth-child(1) {
+    animation-delay: .08s;
+  }
+
+  .hero h1 span:nth-child(2) {
+    animation-delay: .17s;
+  }
+
+  .hero h1 span:nth-child(3) {
+    animation-delay: .26s;
+  }
+
+  .hero-kicker {
+    animation: soft-in .5s ease both;
+  }
+
+  .hero-dek {
+    opacity: 0;
+    animation: hero-rise .65s .36s cubic-bezier(.2, .7, .2, 1) both;
+  }
+
+  .byline {
+    opacity: 0;
+    animation: hero-rise .65s .44s cubic-bezier(.2, .7, .2, 1) both;
+  }
+
+  .hero-actions {
+    opacity: 0;
+    animation: hero-rise .65s .52s cubic-bezier(.2, .7, .2, 1) both;
+  }
+
+  .hero-figure {
+    opacity: 0;
+    animation: figure-in .9s .22s cubic-bezier(.2, .7, .2, 1) both;
+  }
+}
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes figure-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes soft-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* Parallax ringan: hanya berlaku di layar lebar. */
+@media (min-width: 861px) and (prefers-reduced-motion: no-preference) {
+
+  .figure-stack,
+  .hero-figure .halftone,
+  .hero-figure .blue-block {
+    will-change: transform;
+  }
+}
+
+.figure-stack {
+  transform: translate3d(0, var(--parallax-main, 0px), 0);
+}
+
+.hero-figure .halftone {
+  transform: rotate(-2deg) translate3d(0, var(--parallax-back, 0px), 0);
+}
+
+.hero-figure .blue-block {
+  transform: rotate(3deg) translate3d(0, var(--parallax-mid, 0px), 0);
+}
+
+/* Umpan balik saat figur ditukar. */
+.face-toggle button {
+  transition: transform .12s ease, background-color .16s ease, color .16s ease;
+}
+
+.face-toggle button:active {
+  transform: translate(2px, 2px);
+}
+
+.hero-figure::after {
+  content: "";
+  position: absolute;
+  inset: 34px 14px 84px 26px;
+  z-index: 4;
+  border: 2px solid var(--red);
+  opacity: 0;
+  transform: scale(.96);
+  pointer-events: none;
+}
+
+.hero-figure.is-sensing::after {
+  animation: spider-sense .62s ease-out;
+}
+
+@keyframes spider-sense {
+  0% {
+    opacity: 0;
+    transform: scale(.96);
+  }
+
+  22% {
+    opacity: .85;
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.035);
+  }
+}
+
+/* Stiker komik di dekat CTA, hanya saat hover/fokus. */
+.btn--web {
+  position: relative;
+}
+
+.thwip {
+  position: absolute;
+  left: 50%;
+  top: -21px;
+  z-index: 2;
+  padding: 5px 8px;
+  background: var(--yellow);
+  color: var(--ink);
+  font-family: var(--display);
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: .05em;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(-50%) rotate(-7deg) scale(.7);
+  transform-origin: 50% 100%;
+  clip-path: polygon(50% 0, 61% 15%, 80% 4%, 82% 25%, 100% 34%, 86% 50%, 98% 68%, 76% 70%, 68% 92%, 51% 78%, 32% 96%, 27% 72%, 6% 70%, 16% 50%, 0 36%, 22% 27%, 23% 6%, 41% 16%);
+  filter: drop-shadow(2px 2px 0 var(--ink));
+  pointer-events: none;
+  transition: opacity .16s ease, transform .28s cubic-bezier(.34, 1.56, .64, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+
+  .btn--web:hover .thwip,
+  .btn--web:focus-visible .thwip {
+    opacity: 1;
+    transform: translateX(-50%) rotate(-4deg) scale(1);
+  }
+}
+
+/* Lambang laba-laba kecil di garis pembatas section. */
+.section {
+  position: relative;
+}
+
+.divider-spider {
+  position: absolute;
+  top: -14px;
+  left: 8px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 27px;
+  height: 27px;
+  background: var(--paper);
+  color: var(--ink);
+  opacity: 0;
+  transform: translateY(-6px) scale(.9);
+  pointer-events: none;
+  transition: opacity .4s ease, transform .45s cubic-bezier(.2, .7, .2, 1);
+}
+
+.section.in .divider-spider {
+  opacity: 1;
+  transform: none;
+  transition-delay: .16s;
+}
+
+.divider-spider svg {
+  display: block;
+  width: 23px;
+  height: 23px;
+}
+
+/* Judul section masuk berurutan. */
+@media (prefers-reduced-motion: no-preference) {
+  .section-head.in>* {
+    animation: section-rise .55s cubic-bezier(.2, .7, .2, 1) both;
+  }
+
+  .section-head.in>*:nth-child(1) {
+    animation-delay: .03s;
+  }
+
+  .section-head.in>*:nth-child(2) {
+    animation-delay: .11s;
+  }
+
+  .section-head.in>*:nth-child(3) {
+    animation-delay: .19s;
+  }
+}
+
+@keyframes section-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Statistik: angka rata supaya count-up tidak menggeser layout. */
+.stats strong {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Kartu project naik dengan bayangan offset. */
+.clip {
+  transition: transform .28s cubic-bezier(.2, .7, .2, 1), box-shadow .28s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .clip:hover {
+    transform: translateY(-5px);
+    box-shadow: 7px 7px 0 var(--ink);
+  }
+}
+
+/* Polaroid miring, lalu tegak saat disentuh. */
+.polaroid {
+  transition: transform .3s cubic-bezier(.2, .7, .2, 1), box-shadow .3s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .polaroid:hover {
+    transform: rotate(0deg) translateY(-4px);
+    box-shadow: 6px 6px 0 rgba(20, 20, 20, .22);
+  }
+}
+
+.polaroid:active {
+  transform: rotate(0deg) translateY(-2px);
+}
+
+@media (max-width: 860px) {
+  .web--tl {
+    top: 10px;
+    left: -148px;
+    width: 250px;
+    height: 250px;
+    opacity: .16;
+  }
+
+  .web--br {
+    display: none;
+  }
+
+  .divider-spider {
+    left: 0;
+  }
+
+  .thwip {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .web--tl {
+    left: -132px;
+    width: 220px;
+    height: 220px;
+  }
+
+  .divider-spider {
+    top: -13px;
+    width: 25px;
+    height: 25px;
+  }
+
+  .thwip {
+    font-size: 14px;
+  }
+}
+
+.side-map { display: block; background: #0b1720; padding: 10px 12px 8px; text-align: left; color: inherit; text-decoration: none; }
+.side-map:focus-visible { outline: 2px solid #ff8b8f; outline-offset: 2px; }
+.side-map-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-family: var(--mono); font-size: 8px; letter-spacing: .06em; text-transform: uppercase; color: #dce9ec; }
+.side-map-live { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; color: #ff8b8f; }
+.side-map-live::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--red); box-shadow: 0 0 0 3px rgba(216, 35, 42, .16); }
+.side-map-frame { display: block; position: relative; margin-top: 8px; border: 1px solid rgba(220, 233, 236, .24); background: #0b1720; overflow: hidden; color: inherit; text-decoration: none; transition: border-color .18s ease, box-shadow .18s ease; }
+.side-map:hover .side-map-frame { border-color: rgba(255, 139, 143, .65); box-shadow: 0 0 0 1px rgba(224, 49, 56, .22); }
+.side-map-open { white-space: nowrap; }
+.side-map svg { display: block; width: 100%; height: auto; }
+.side-map-foot { display: flex; justify-content: space-between; gap: 8px; margin-top: 7px; font-family: var(--mono); font-size: 7px; line-height: 1.4; letter-spacing: .03em; text-transform: uppercase; color: #7fa3ac; }
+.side-map-foot span:last-child { color: #ff8b8f; text-align: right; }
+.map-route { filter: drop-shadow(0 0 3px rgba(224, 49, 56, .7)); }
+.map-pin, .map-ping { transform-box: fill-box; transform-origin: center; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .section.in .map-route { stroke-dasharray: 1; animation: map-route 1.2s .25s cubic-bezier(.2, .7, .2, 1) both; }
+  .section.in .map-pin { animation: map-pin-in .45s .85s cubic-bezier(.2, .8, .2, 1) both; }
+  .section.in .map-ping { animation: map-ping 2.4s 1s ease-out infinite; }
+}
+
+@keyframes map-route { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes map-pin-in { from { opacity: 0; transform: scale(.55) translateY(-5px); } to { opacity: 1; transform: none; } }
+@keyframes map-ping { 0% { opacity: .75; transform: scale(.35); } 75%, 100% { opacity: 0; transform: scale(2.1); } }
