@@ -82,19 +82,26 @@ CREATE TABLE IF NOT EXISTS user (
 INSERT INTO konten (section, kunci, nilai) VALUES
 ('hero', 'sapaan', 'Halo, Saya'),
 ('hero', 'nama', 'Erwa Muzaky'),
-('hero', 'deskripsi', 'Siswa Rekayasa Perangkat Lunak di SMKN 3 Pariaman yang fokus pada Web Development. Selain hobi ngulik koding dan mewujudkan ide menjadi web yang rapi, saya juga aktif di organisasi sekolah dan terbiasa bekerja bareng tim.'),
+('hero', 'deskripsi', 'Siswa RPL di SMKN 3 Pariaman. Belajar bikin website dan aplikasi, dari tampilan sampai database. Di luar kelas, saya aktif di organisasi sekolah.'),
 ('hero', 'foto', 'foto/foto.jpeg'),
-('about', 'paragraf_pembuka', 'Keseharian saya banyak diisi dengan ngoding dan ngebangun aplikasi web. Beberapa hal yang biasa saya kerjakan antara lain:'),
-('about', 'keahlian', 'HTML & CSS: Merancang dan membangun tampilan web yang rapi serta responsif di berbagai ukuran layar.|PHP & Laravel: Mengembangkan fitur-fitur aplikasi web berbasis PHP menggunakan framework Laravel.|MySQL: Mengelola database relasional untuk kebutuhan penyimpanan dan pemrosesan data aplikasi.'),
-('about', 'paragraf_organisasi', 'Tapi di sekolah, saya nggak cuma diam di depan laptop. Saya juga aktif di organisasi:'),
-('about', 'paragraf_penutup', 'Dari pengalaman itu, saya jadi terbiasa disiplin, paham cara kerja bareng tim, dan nggak canggung kalau harus ngomong di depan orang. Saya selalu senang belajar hal baru dan terbuka banget sama masukan biar hasil karya saya makin bagus.'),
+('about', 'paragraf_pembuka', 'Sebagian besar waktu saya habis untuk ngoding dan bikin aplikasi web. Yang paling sering saya kerjakan:'),
+('about', 'keahlian', 'HTML & CSS: Merancang tampilan web yang rapi dan tetap enak dilihat di HP maupun laptop.|PHP & Laravel: Membuat fitur aplikasi dan API dengan Laravel.|MySQL: Merancang tabel dan mengelola data yang dipakai aplikasi.'),
+('about', 'paragraf_organisasi', 'Di sekolah saya juga aktif di organisasi, jadi nggak cuma duduk di depan laptop:'),
+('about', 'paragraf_penutup', 'Dari situ saya belajar disiplin, bagi tugas sama tim, dan berani ngomong di depan orang. Kalau ada masukan, saya pakai buat memperbaiki hasil kerja.'),
 ('about', 'lokasi', 'Korong Tanah Taban, Limau Puruik, Kec. V Koto Timur, Kab. Padang Pariaman, Sumatera Barat'),
 ('about', 'maps_src', 'https://maps.google.com/maps?q=C4MP%2B26J,%20Limau%20Puruik,%20Padang%20Pariaman&t=&z=14&ie=UTF8&iwloc=&output=embed'),
+('about', 'kutipan_kartu', 'Percayalah pada proses, karena hal besar membutuhkan waktu.'),
+('about', 'peta_wilayah', 'Padang Pariaman'),
+('about', 'peta_provinsi', 'Sumatera Barat'),
+('about', 'peta_lokasi', 'Limau Puruik · Padang Pariaman'),
+('about', 'peta_status', 'Sinyal aktif'),
+('about', 'peta_marker', 'REDAKSI'),
+('about', 'peta_perairan', 'SAMUDRA HINDIA'),
 ('about', 'jurusan', 'Rekayasa Perangkat Lunak (RPL)'),
 ('about', 'fokus', 'Web & Mobile Development'),
 ('contact', 'email', 'erwamuzaky447@gmail.com'),
-('contact', 'pesan', 'Kalau ada yang mau ditanyakan, ngobrol, diskusi, langsung lewat email atau link di bawah ini ya!'),
-('footer', 'teks', 'Erwa Muzaky. Student of SMKN 3 Pariaman.')
+('contact', 'pesan', 'Ada yang mau ditanyakan atau diajak diskusi? Kirim email atau hubungi lewat link di bawah.'),
+('footer', 'teks', 'Erwa Muzaky · Siswa SMKN 3 Pariaman.')
 ON DUPLICATE KEY UPDATE nilai = VALUES(nilai);
 
 -- ========== SEED: SOSIAL ==========
@@ -105,21 +112,21 @@ INSERT INTO sosial (nama, url, urutan) VALUES
 
 -- ========== SEED: PROJECT ==========
 INSERT INTO project (judul, peran, tahun, deskripsi, hasil, detail, gambar, tag, link, urutan) VALUES
-('Website Perpustakaan Digital', 'Web Developer', '', 'Website Perpustakaan Digital yang saya kembangkan untuk memudahkan pengelolaan data buku secara lebih praktis dan terorganisir. Website ini dibangun menggunakan Laravel, PHP, HTML, CSS, dan MySQL, serta dilengkapi fitur login, pengelolaan data buku, kategori, penerbit, dan CRUD (Create, Read, Update, Delete). Hasil akhirnya adalah aplikasi web yang mempermudah proses administrasi perpustakaan dengan tampilan yang sederhana, responsif, dan mudah digunakan.', 'Aplikasi web yang mempermudah proses administrasi perpustakaan dengan tampilan sederhana, responsif, dan mudah digunakan.', 'Website Perpustakaan Digital dibuat untuk memudahkan pengelolaan data buku secara lebih praktis dan terorganisir.
+('Website Perpustakaan Digital', 'Web Developer', '', 'Website pengelolaan buku perpustakaan dengan Laravel dan MySQL. Ada login, kategori, penerbit, dan fitur tambah-ubah-hapus. Tampilannya sederhana supaya petugas mudah memakainya.', 'Data buku, kategori, dan penerbit tersimpan di satu database, jadi petugas tidak perlu mencatat manual.', 'Website Perpustakaan Digital saya buat untuk menggantikan pencatatan buku yang masih manual.
 
-Fitur utama: login, pengelolaan data buku, kategori, penerbit, dan CRUD (Create, Read, Update, Delete).
+Fitur utamanya: login, kelola data buku, kategori, dan penerbit, plus tambah, ubah, dan hapus data.
 
-Dibangun dengan Laravel, PHP, HTML, CSS, dan MySQL.', 'foto/proyek1.png', 'Laravel, PHP, MySQL', '', 1),
-('Website Inventaris Bengkel Komputer', 'Web Developer', '', 'Website Inventaris Bengkel Komputer merupakan aplikasi berbasis web yang saya kembangkan untuk membantu pengelolaan inventaris peralatan dan barang di bengkel komputer. Website ini dibangun menggunakan Laravel, PHP, HTML, CSS, dan MySQL, serta dilengkapi fitur login admin, dashboard, pengelolaan data inventaris, upload gambar barang, dan pembuatan laporan. Hasil akhirnya adalah sistem yang memudahkan proses pendataan barang agar lebih rapi, terstruktur, dan efisien.', 'Sistem yang memudahkan pendataan barang agar lebih rapi, terstruktur, dan efisien.', 'Website Inventaris Bengkel Komputer membantu pengelolaan inventaris peralatan dan barang di bengkel komputer.
+Dibangun dengan Laravel, MySQL, HTML, dan CSS.', 'foto/proyek1.png', 'Laravel, PHP, MySQL', '', 1),
+('Website Inventaris Bengkel Komputer', 'Web Developer', '', 'Website untuk mendata inventaris barang di bengkel komputer. Dibuat dengan Laravel dan MySQL, ada login admin, dashboard, unggah foto barang, dan laporan. Data barang jadi lebih rapi dan gampang dicek.', 'Barang masuk dan keluar tercatat di satu tempat, dan laporannya bisa langsung dibuat dari aplikasi.', 'Website Inventaris Bengkel Komputer dipakai untuk mencatat peralatan dan barang di bengkel.
 
-Fitur utama: login admin, dashboard, pengelolaan data inventaris, upload gambar barang, dan pembuatan laporan.
+Fitur utamanya: login admin, dashboard, kelola data inventaris, unggah foto barang, dan cetak laporan.
 
-Dibangun dengan Laravel, PHP, HTML, CSS, dan MySQL.', 'foto/proyek2.png', 'Laravel, PHP, MySQL', '', 2),
-('Aplikasi Manajemen Produk', 'Mobile Developer', '', 'Aplikasi mobile yang saya kembangkan menggunakan Flutter untuk memudahkan pengelolaan data produk. Aplikasi ini terhubung dengan API berbasis PHP dan database MySQL, serta menyediakan fitur menampilkan, menambah, mengubah, melihat detail, dan menghapus data produk. Proyek ini membantu saya memahami proses pengembangan aplikasi mobile yang terintegrasi dengan backend.', 'Aplikasi mobile yang terintegrasi dengan backend untuk pengelolaan data produk.', 'Aplikasi mobile untuk memudahkan pengelolaan data produk.
+Dibangun dengan Laravel, MySQL, HTML, dan CSS.', 'foto/proyek2.png', 'Laravel, PHP, MySQL', '', 2),
+('Aplikasi Manajemen Produk', 'Mobile Developer', '', 'Aplikasi Flutter untuk mengelola data produk. Datanya diambil dari API PHP dan disimpan di MySQL, jadi produk bisa dilihat, ditambah, diubah, dan dihapus langsung dari HP.', 'Data produk bisa dikelola dari HP tanpa perlu membuka komputer.', 'Aplikasi mobile untuk mengelola data produk dari HP.
 
-Fitur utama: menampilkan, menambah, mengubah, melihat detail, dan menghapus data produk.
+Fitur utamanya: lihat daftar produk, tambah, ubah, lihat detail, dan hapus data.
 
-Dibangun dengan Flutter, API PHP, dan database MySQL.', 'foto/proyek3.jpeg', 'Flutter, PHP, MySQL', '', 3);
+Dibangun dengan Flutter, API PHP, dan MySQL.', 'foto/proyek3.jpeg', 'Flutter, PHP, MySQL', '', 3);
 
 -- ========== SEED: SKILL ==========
 INSERT INTO skill (nama, ikon, kategori, deskripsi, urutan) VALUES
@@ -131,12 +138,12 @@ INSERT INTO skill (nama, ikon, kategori, deskripsi, urutan) VALUES
 ('Laravel', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-original.svg', 'hard', '', 6),
 ('MySQL', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg', 'hard', '', 7),
 ('Flutter', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg', 'hard', '', 8),
-('Public Speaking & Komunikasi', '', 'soft', 'Percaya diri dan tidak canggung saat harus berbicara, presentasi, atau menyampaikan ide di depan orang banyak.', 1),
-('Kerja Sama Tim', '', 'soft', 'Terbiasa berkolaborasi, berdiskusi, dan saling melengkapi dengan anggota tim dalam menyelesaikan project.', 2),
-('Kepemimpinan & Organisasi', '', 'soft', 'Paham cara mengarahkan tim dan mengelola kegiatan dari pengalaman di OSIS, Paskibraka, PKS, dan Pramuka.', 3),
-('Kedisiplinan Tinggi', '', 'soft', 'Terbiasa tepat waktu, patuh pada aturan, dan bertanggung jawab menyelesaikan tugas tepat jadwal.', 4),
-('Cepat Belajar (Fast Learner)', '', 'soft', 'Selalu antusias dan cepat paham saat mempelajari teknologi, framework, atau hal baru yang belum pernah dicoba.', 5),
-('Terbuka pada Evaluasi', '', 'soft', 'Menerima kritik dan saran dengan positif sebagai bahan untuk memperbaiki serta meningkatkan kualitas karya.', 6);
+('Public Speaking & Komunikasi', '', 'soft', 'Berani bicara dan presentasi di depan orang, termasuk saat harus menyampaikan pendapat.', 1),
+('Kerja Sama Tim', '', 'soft', 'Terbiasa bagi tugas dan berdiskusi dengan tim sampai project selesai.', 2),
+('Kepemimpinan & Organisasi', '', 'soft', 'Belajar mengatur tim dan kegiatan dari pengalaman di OSIS, Paskibraka, PKS, dan Pramuka.', 3),
+('Disiplin', '', 'soft', 'Tepat waktu dan menyelesaikan tugas sesuai jadwal.', 4),
+('Cepat Belajar', '', 'soft', 'Cepat menyesuaikan diri saat harus memakai teknologi atau framework baru.', 5),
+('Terbuka pada Masukan', '', 'soft', 'Terbuka pada kritik dan memakainya untuk memperbaiki hasil kerja.', 6);
 
 -- ========== SEED: PENDIDIKAN ==========
 INSERT INTO pendidikan (nama, jurusan, tahun, urutan) VALUES
@@ -147,8 +154,8 @@ INSERT INTO pendidikan (nama, jurusan, tahun, urutan) VALUES
 -- ========== SEED: PENGALAMAN ==========
 INSERT INTO pengalaman (nama, peran, tahun, deskripsi, urutan) VALUES
 ('OSIS SMKN 3 Pariaman', 'Wakil Ketua', '', 'Membantu ketua OSIS mengoordinasi program kerja dan kegiatan sekolah.', 1),
-('Paskibraka', 'Anggota', '', 'Mengikuti pelatihan dan bertugas pada upacara bendera.', 2),
-('Pramuka', 'Anggota', '', 'Aktif dalam kegiatan kepramukaan dan kerja sama tim.', 3),
+('Paskibraka Kota Pariaman', 'Anggota', '', 'Mengikuti pelatihan dan bertugas pada upacara bendera.', 2),
+('Pramuka Gudep SMKN 3 Pariaman', 'Anggota', '', 'Aktif dalam kegiatan kepramukaan dan kerja sama tim.', 3),
 ('PKS', 'Anggota', '', 'Membantu menjaga ketertiban lingkungan sekolah.', 4);
 
 -- ========== SEED: ADMIN ==========
