@@ -4,15 +4,18 @@ Spiderman/
 # Cadangan database
 backup_*.sql
 
-# Skrip sisa / sekali pakai
-siapkan_gambar_web.py
-bersihkan_css.py
-peta_ganti_nama.txt
-uji_galeri.php
+# Berkas kerja desain
+design-demos/
 
 # Berkas kerja tool (bukan bagian project)
 .omo/
 .playwright-mcp/
+
+# Arsip berkas lama / sekali pakai
+arsip/
+
+# Perkakas lokal Python (tidak ikut server/Git)
+tools/
 
 # Kredensial database: pakai config.contoh.php sebagai acuan
 config.php
@@ -20,6 +23,8 @@ config.php
 # Tangkapan layar pemeriksaan
 laba-baru.png
 tahap-*.png
+cek-*.png
 
 # Gambar hasil AI yang tidak dipakai halaman
 foto/Gemini_Generated_Image_*.png
+foto/Gemini_Generated_Image_*.webp

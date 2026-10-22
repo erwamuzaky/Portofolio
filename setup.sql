@@ -5,7 +5,7 @@
 CREATE DATABASE IF NOT EXISTS portofolio CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE portofolio;
 
-DROP TABLE IF EXISTS konten, sosial, project, skill, pendidikan, user;
+DROP TABLE IF EXISTS konten, sosial, project, skill, pendidikan, pengalaman, sertifikat, user;
 
 CREATE TABLE IF NOT EXISTS konten (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -25,9 +25,32 @@ CREATE TABLE IF NOT EXISTS sosial (
 CREATE TABLE IF NOT EXISTS project (
     id INT AUTO_INCREMENT PRIMARY KEY,
     judul VARCHAR(150) NOT NULL,
+    peran VARCHAR(100) NOT NULL DEFAULT '',
+    tahun VARCHAR(20) NOT NULL DEFAULT '',
     deskripsi TEXT NOT NULL,
+    hasil VARCHAR(255) NOT NULL DEFAULT '',
+    detail TEXT NOT NULL DEFAULT '',
     gambar VARCHAR(255) NOT NULL DEFAULT '',
     tag VARCHAR(100) NOT NULL DEFAULT '',
+    link VARCHAR(255) NOT NULL DEFAULT '',
+    urutan INT NOT NULL DEFAULT 0
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS pengalaman (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nama VARCHAR(150) NOT NULL,
+    peran VARCHAR(100) NOT NULL DEFAULT '',
+    tahun VARCHAR(50) NOT NULL DEFAULT '',
+    deskripsi TEXT NOT NULL DEFAULT '',
+    urutan INT NOT NULL DEFAULT 0
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS sertifikat (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nama VARCHAR(150) NOT NULL,
+    penerbit VARCHAR(150) NOT NULL DEFAULT '',
+    tahun VARCHAR(50) NOT NULL DEFAULT '',
+    gambar VARCHAR(255) NOT NULL DEFAULT '',
     link VARCHAR(255) NOT NULL DEFAULT '',
     urutan INT NOT NULL DEFAULT 0
 ) ENGINE=InnoDB;
@@ -81,10 +104,22 @@ INSERT INTO sosial (nama, url, urutan) VALUES
 ('WhatsApp', 'https://wa.me/qr/X5ZOHWKI4YGNM1', 3);
 
 -- ========== SEED: PROJECT ==========
-INSERT INTO project (judul, deskripsi, gambar, tag, link, urutan) VALUES
-('Website Perpustakaan Digital', 'Website Perpustakaan Digital yang saya kembangkan untuk memudahkan pengelolaan data buku secara lebih praktis dan terorganisir. Website ini dibangun menggunakan Laravel, PHP, HTML, CSS, dan MySQL, serta dilengkapi fitur login, pengelolaan data buku, kategori, penerbit, dan CRUD (Create, Read, Update, Delete). Hasil akhirnya adalah aplikasi web yang mempermudah proses administrasi perpustakaan dengan tampilan yang sederhana, responsif, dan mudah digunakan.', 'foto/proyek1.png', 'Laravel', '', 1),
-('Website Inventaris Bengkel Komputer', 'Website Inventaris Bengkel Komputer merupakan aplikasi berbasis web yang saya kembangkan untuk membantu pengelolaan inventaris peralatan dan barang di bengkel komputer. Website ini dibangun menggunakan Laravel, PHP, HTML, CSS, dan MySQL, serta dilengkapi fitur login admin, dashboard, pengelolaan data inventaris, upload gambar barang, dan pembuatan laporan. Hasil akhirnya adalah sistem yang memudahkan proses pendataan barang agar lebih rapi, terstruktur, dan efisien.', 'foto/proyek2.png', 'Laravel', '', 2),
-('Aplikasi Manajemen Produk', 'Aplikasi mobile yang saya kembangkan menggunakan Flutter untuk memudahkan pengelolaan data produk. Aplikasi ini terhubung dengan API berbasis PHP dan database MySQL, serta menyediakan fitur menampilkan, menambah, mengubah, melihat detail, dan menghapus data produk. Proyek ini membantu saya memahami proses pengembangan aplikasi mobile yang terintegrasi dengan backend.', 'foto/proyek3.jpeg', 'Flutter', '', 3);
+INSERT INTO project (judul, peran, tahun, deskripsi, hasil, detail, gambar, tag, link, urutan) VALUES
+('Website Perpustakaan Digital', 'Web Developer', '', 'Website Perpustakaan Digital yang saya kembangkan untuk memudahkan pengelolaan data buku secara lebih praktis dan terorganisir. Website ini dibangun menggunakan Laravel, PHP, HTML, CSS, dan MySQL, serta dilengkapi fitur login, pengelolaan data buku, kategori, penerbit, dan CRUD (Create, Read, Update, Delete). Hasil akhirnya adalah aplikasi web yang mempermudah proses administrasi perpustakaan dengan tampilan yang sederhana, responsif, dan mudah digunakan.', 'Aplikasi web yang mempermudah proses administrasi perpustakaan dengan tampilan sederhana, responsif, dan mudah digunakan.', 'Website Perpustakaan Digital dibuat untuk memudahkan pengelolaan data buku secara lebih praktis dan terorganisir.
+
+Fitur utama: login, pengelolaan data buku, kategori, penerbit, dan CRUD (Create, Read, Update, Delete).
+
+Dibangun dengan Laravel, PHP, HTML, CSS, dan MySQL.', 'foto/proyek1.png', 'Laravel, PHP, MySQL', '', 1),
+('Website Inventaris Bengkel Komputer', 'Web Developer', '', 'Website Inventaris Bengkel Komputer merupakan aplikasi berbasis web yang saya kembangkan untuk membantu pengelolaan inventaris peralatan dan barang di bengkel komputer. Website ini dibangun menggunakan Laravel, PHP, HTML, CSS, dan MySQL, serta dilengkapi fitur login admin, dashboard, pengelolaan data inventaris, upload gambar barang, dan pembuatan laporan. Hasil akhirnya adalah sistem yang memudahkan proses pendataan barang agar lebih rapi, terstruktur, dan efisien.', 'Sistem yang memudahkan pendataan barang agar lebih rapi, terstruktur, dan efisien.', 'Website Inventaris Bengkel Komputer membantu pengelolaan inventaris peralatan dan barang di bengkel komputer.
+
+Fitur utama: login admin, dashboard, pengelolaan data inventaris, upload gambar barang, dan pembuatan laporan.
+
+Dibangun dengan Laravel, PHP, HTML, CSS, dan MySQL.', 'foto/proyek2.png', 'Laravel, PHP, MySQL', '', 2),
+('Aplikasi Manajemen Produk', 'Mobile Developer', '', 'Aplikasi mobile yang saya kembangkan menggunakan Flutter untuk memudahkan pengelolaan data produk. Aplikasi ini terhubung dengan API berbasis PHP dan database MySQL, serta menyediakan fitur menampilkan, menambah, mengubah, melihat detail, dan menghapus data produk. Proyek ini membantu saya memahami proses pengembangan aplikasi mobile yang terintegrasi dengan backend.', 'Aplikasi mobile yang terintegrasi dengan backend untuk pengelolaan data produk.', 'Aplikasi mobile untuk memudahkan pengelolaan data produk.
+
+Fitur utama: menampilkan, menambah, mengubah, melihat detail, dan menghapus data produk.
+
+Dibangun dengan Flutter, API PHP, dan database MySQL.', 'foto/proyek3.jpeg', 'Flutter, PHP, MySQL', '', 3);
 
 -- ========== SEED: SKILL ==========
 INSERT INTO skill (nama, ikon, kategori, deskripsi, urutan) VALUES
@@ -108,6 +143,13 @@ INSERT INTO pendidikan (nama, jurusan, tahun, urutan) VALUES
 ('SMKN 3 Pariaman', 'Rekayasa Perangkat Lunak (RPL)', '2024 – 2027 (Sekarang)', 1),
 ('MTsN 1 Kota Pariaman', 'Pendidikan Menengah Pertama', '2021 – 2024', 2),
 ('SDN 02 Sikapak Barat', 'Pendidikan Dasar', '2015 – 2021', 3);
+
+-- ========== SEED: PENGALAMAN ==========
+INSERT INTO pengalaman (nama, peran, tahun, deskripsi, urutan) VALUES
+('OSIS SMKN 3 Pariaman', 'Wakil Ketua', '', 'Membantu ketua OSIS mengoordinasi program kerja dan kegiatan sekolah.', 1),
+('Paskibraka', 'Anggota', '', 'Mengikuti pelatihan dan bertugas pada upacara bendera.', 2),
+('Pramuka', 'Anggota', '', 'Aktif dalam kegiatan kepramukaan dan kerja sama tim.', 3),
+('PKS', 'Anggota', '', 'Membantu menjaga ketertiban lingkungan sekolah.', 4);
 
 -- ========== SEED: ADMIN ==========
 -- Tidak ada password default di repo. Setup akan GAGAL bila admin belum diisi.

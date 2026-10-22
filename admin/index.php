@@ -45,10 +45,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($aksi === 'tambah_project') {
             $gambar = simpan_upload_gambar($_FILES['gambar_file'] ?? [])
                 ?? trim($_POST['gambar'] ?? '');
-            $stmt = $pdo->prepare('INSERT INTO project (judul, deskripsi, gambar, tag, link, urutan) VALUES (?, ?, ?, ?, ?, ?)');
+            $stmt = $pdo->prepare('INSERT INTO project (judul, peran, tahun, deskripsi, hasil, detail, gambar, tag, link, urutan) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
             $stmt->execute([
                 trim($_POST['judul'] ?? ''),
+                trim($_POST['peran'] ?? ''),
+                trim($_POST['tahun'] ?? ''),
                 trim($_POST['deskripsi'] ?? ''),
+                trim($_POST['hasil'] ?? ''),
+                trim($_POST['detail'] ?? ''),
                 $gambar,
                 trim($_POST['tag'] ?? ''),
                 trim($_POST['link'] ?? ''),
@@ -58,10 +62,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($aksi === 'ubah_project') {
             $gambarBaru = simpan_upload_gambar($_FILES['gambar_file'] ?? []);
             $gambar = $gambarBaru ?? trim($_POST['gambar'] ?? '');
-            $stmt = $pdo->prepare('UPDATE project SET judul = ?, deskripsi = ?, gambar = ?, tag = ?, link = ?, urutan = ? WHERE id = ?');
+            $stmt = $pdo->prepare('UPDATE project SET judul = ?, peran = ?, tahun = ?, deskripsi = ?, hasil = ?, detail = ?, gambar = ?, tag = ?, link = ?, urutan = ? WHERE id = ?');
             $stmt->execute([
                 trim($_POST['judul'] ?? ''),
+                trim($_POST['peran'] ?? ''),
+                trim($_POST['tahun'] ?? ''),
                 trim($_POST['deskripsi'] ?? ''),
+                trim($_POST['hasil'] ?? ''),
+                trim($_POST['detail'] ?? ''),
                 $gambar,
                 trim($_POST['tag'] ?? ''),
                 trim($_POST['link'] ?? ''),
@@ -72,6 +80,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($aksi === 'hapus_project') {
             $pdo->prepare('DELETE FROM project WHERE id = ?')->execute([$id]);
             $_SESSION['pesan'] = 'Project dihapus.';
+        } elseif ($aksi === 'tambah_pengalaman') {
+            $stmt = $pdo->prepare('INSERT INTO pengalaman (nama, peran, tahun, deskripsi, urutan) VALUES (?, ?, ?, ?, ?)');
+            $stmt->execute([
+                trim($_POST['nama'] ?? ''),
+                trim($_POST['peran'] ?? ''),
+                trim($_POST['tahun'] ?? ''),
+                trim($_POST['deskripsi'] ?? ''),
+                (int) ($_POST['urutan'] ?? 0),
+            ]);
+            $_SESSION['pesan'] = 'Pengalaman ditambahkan.';
+        } elseif ($aksi === 'ubah_pengalaman') {
+            $stmt = $pdo->prepare('UPDATE pengalaman SET nama = ?, peran = ?, tahun = ?, deskripsi = ?, urutan = ? WHERE id = ?');
+            $stmt->execute([
+                trim($_POST['nama'] ?? ''),
+                trim($_POST['peran'] ?? ''),
+                trim($_POST['tahun'] ?? ''),
+                trim($_POST['deskripsi'] ?? ''),
+                (int) ($_POST['urutan'] ?? 0),
+                $id,
+            ]);
+            $_SESSION['pesan'] = 'Pengalaman diperbarui.';
+        } elseif ($aksi === 'hapus_pengalaman') {
+            $pdo->prepare('DELETE FROM pengalaman WHERE id = ?')->execute([$id]);
+            $_SESSION['pesan'] = 'Pengalaman dihapus.';
+        } elseif ($aksi === 'tambah_sertifikat') {
+            $gambar = simpan_upload_gambar($_FILES['gambar_file'] ?? [])
+                ?? trim($_POST['gambar'] ?? '');
+            $stmt = $pdo->prepare('INSERT INTO sertifikat (nama, penerbit, tahun, gambar, link, urutan) VALUES (?, ?, ?, ?, ?, ?)');
+            $stmt->execute([
+                trim($_POST['nama'] ?? ''),
+                trim($_POST['penerbit'] ?? ''),
+                trim($_POST['tahun'] ?? ''),
+                $gambar,
+                trim($_POST['link'] ?? ''),
+                (int) ($_POST['urutan'] ?? 0),
+            ]);
+            $_SESSION['pesan'] = 'Sertifikat ditambahkan.';
+        } elseif ($aksi === 'ubah_sertifikat') {
+            $gambarBaru = simpan_upload_gambar($_FILES['gambar_file'] ?? []);
+            $gambar = $gambarBaru ?? trim($_POST['gambar'] ?? '');
+            $stmt = $pdo->prepare('UPDATE sertifikat SET nama = ?, penerbit = ?, tahun = ?, gambar = ?, link = ?, urutan = ? WHERE id = ?');
+            $stmt->execute([
+                trim($_POST['nama'] ?? ''),
+                trim($_POST['penerbit'] ?? ''),
+                trim($_POST['tahun'] ?? ''),
+                $gambar,
+                trim($_POST['link'] ?? ''),
+                (int) ($_POST['urutan'] ?? 0),
+                $id,
+            ]);
+            $_SESSION['pesan'] = $gambarBaru ? 'Sertifikat diperbarui dan gambar baru diunggah.' : 'Sertifikat diperbarui.';
+        } elseif ($aksi === 'hapus_sertifikat') {
+            $pdo->prepare('DELETE FROM sertifikat WHERE id = ?')->execute([$id]);
+            $_SESSION['pesan'] = 'Sertifikat dihapus.';
         } elseif ($aksi === 'tambah_skill') {
             $kategori = $_POST['kategori'] === 'soft' ? 'soft' : 'hard';
             $stmt = $pdo->prepare('INSERT INTO skill (nama, ikon, kategori, deskripsi, urutan) VALUES (?, ?, ?, ?, ?)');
@@ -165,6 +227,8 @@ $sosial = $pdo->query('SELECT * FROM sosial ORDER BY urutan, id')->fetchAll();
 $projects = $pdo->query('SELECT * FROM project ORDER BY urutan, id')->fetchAll();
 $skills = $pdo->query('SELECT * FROM skill ORDER BY kategori, urutan, id')->fetchAll();
 $pendidikan = $pdo->query('SELECT * FROM pendidikan ORDER BY urutan, id')->fetchAll();
+$pengalaman = $pdo->query('SELECT * FROM pengalaman ORDER BY urutan, id')->fetchAll();
+$sertifikat = $pdo->query('SELECT * FROM sertifikat ORDER BY urutan, id')->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -173,6 +237,7 @@ $pendidikan = $pdo->query('SELECT * FROM pendidikan ORDER BY urutan, id')->fetch
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Admin | Portofolio</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%23090b12'/%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%23e23636' stroke-width='2'/%3E%3Cpath d='M16 3v26M3 16h26M7 7l18 18M25 7L7 25' stroke='%234f7dff' stroke-width='1' opacity='.55'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23e23636'/%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
@@ -212,6 +277,14 @@ $pendidikan = $pdo->query('SELECT * FROM pendidikan ORDER BY urutan, id')->fetch
                 <a href="#pendidikan">
                     <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1 3 3 6 3s6-2 6-3v-5"/></svg>
                     Pendidikan
+                </a>
+                <a href="#pengalaman">
+                    <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3h12v18H6z"/><path d="M9 7h6M9 11h6M9 15h4"/></svg>
+                    Pengalaman
+                </a>
+                <a href="#sertifikat">
+                    <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="9" r="5"/><path d="m8.5 13-1.5 8 5-3 5 3-1.5-8"/></svg>
+                    Sertifikat
                 </a>
                 <a href="#password">
                     <svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
@@ -263,6 +336,14 @@ $pendidikan = $pdo->query('SELECT * FROM pendidikan ORDER BY urutan, id')->fetch
                 <div class="stat-card">
                     <span class="stat-num"><?= count($pendidikan) ?></span>
                     <span class="stat-label">Pendidikan</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-num"><?= count($pengalaman) ?></span>
+                    <span class="stat-label">Pengalaman</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-num"><?= count($sertifikat) ?></span>
+                    <span class="stat-label">Sertifikat</span>
                 </div>
             </div>
 
@@ -383,8 +464,22 @@ $pendidikan = $pdo->query('SELECT * FROM pendidikan ORDER BY urutan, id')->fetch
                         <input type="hidden" name="id" value="<?= $item['id'] ?>">
                         <label for="pj<?= $item['id'] ?>">Judul</label>
                         <input type="text" id="pj<?= $item['id'] ?>" name="judul" value="<?= esc($item['judul']) ?>" required>
-                        <label for="pd<?= $item['id'] ?>">Deskripsi</label>
-                        <textarea id="pd<?= $item['id'] ?>" name="deskripsi" rows="4" required><?= esc($item['deskripsi']) ?></textarea>
+                        <div class="form-2kolom">
+                            <div>
+                                <label for="pr<?= $item['id'] ?>">Peran</label>
+                                <input type="text" id="pr<?= $item['id'] ?>" name="peran" value="<?= esc($item['peran']) ?>" placeholder="Web Developer">
+                            </div>
+                            <div>
+                                <label for="pn<?= $item['id'] ?>">Tahun</label>
+                                <input type="text" id="pn<?= $item['id'] ?>" name="tahun" value="<?= esc($item['tahun']) ?>" placeholder="2025">
+                            </div>
+                        </div>
+                        <label for="pd<?= $item['id'] ?>">Deskripsi Singkat (tampil di kartu)</label>
+                        <textarea id="pd<?= $item['id'] ?>" name="deskripsi" rows="3" required><?= esc($item['deskripsi']) ?></textarea>
+                        <label for="ph<?= $item['id'] ?>">Hasil / Dampak</label>
+                        <input type="text" id="ph<?= $item['id'] ?>" name="hasil" value="<?= esc($item['hasil']) ?>" placeholder="Contoh: pendataan buku jadi lebih cepat">
+                        <label for="pdd<?= $item['id'] ?>">Detail Studi Kasus (pisahkan paragraf dengan baris kosong)</label>
+                        <textarea id="pdd<?= $item['id'] ?>" name="detail" rows="6" placeholder="Latar belakang, fitur utama, teknologi..."><?= esc($item['detail']) ?></textarea>
                         <div class="form-2kolom">
                             <div class="lebar-penuh">
                                 <label for="pl<?= $item['id'] ?>">Link Website Project</label>
@@ -408,7 +503,7 @@ $pendidikan = $pdo->query('SELECT * FROM pendidikan ORDER BY urutan, id')->fetch
                             </div>
                             <?php if ($item['gambar']): ?>
                             <div class="lebar-penuh">
-                                <img src="../<?= esc($item['gambar']) ?>" alt="Gambar <?= esc($item['judul']) ?>" class="pratinjau">
+                                <img src="<?= esc(str_starts_with($item['gambar'], 'http') ? $item['gambar'] : '../' . $item['gambar']) ?>" alt="Gambar <?= esc($item['judul']) ?>" class="pratinjau">
                             </div>
                             <?php endif; ?>
                         </div>
@@ -437,11 +532,27 @@ $pendidikan = $pdo->query('SELECT * FROM pendidikan ORDER BY urutan, id')->fetch
                         </div>
                         <div>
                             <label for="pt-baru">Tag Teknologi</label>
-                            <input type="text" id="pt-baru" name="tag" placeholder="Laravel">
+                            <input type="text" id="pt-baru" name="tag" placeholder="Laravel, PHP, MySQL">
+                        </div>
+                        <div>
+                            <label for="pr-baru">Peran</label>
+                            <input type="text" id="pr-baru" name="peran" placeholder="Web Developer">
+                        </div>
+                        <div>
+                            <label for="pn-baru">Tahun</label>
+                            <input type="text" id="pn-baru" name="tahun" placeholder="2025">
                         </div>
                         <div class="lebar-penuh">
-                            <label for="pd-baru">Deskripsi</label>
-                            <textarea id="pd-baru" name="deskripsi" rows="4" required></textarea>
+                            <label for="pd-baru">Deskripsi Singkat (tampil di kartu)</label>
+                            <textarea id="pd-baru" name="deskripsi" rows="3" required></textarea>
+                        </div>
+                        <div class="lebar-penuh">
+                            <label for="ph-baru">Hasil / Dampak</label>
+                            <input type="text" id="ph-baru" name="hasil" placeholder="Contoh: pendataan buku jadi lebih cepat">
+                        </div>
+                        <div class="lebar-penuh">
+                            <label for="pdd-baru">Detail Studi Kasus (pisahkan paragraf dengan baris kosong)</label>
+                            <textarea id="pdd-baru" name="detail" rows="6" placeholder="Latar belakang, fitur utama, teknologi..."></textarea>
                         </div>
                         <div class="lebar-penuh">
                             <label for="pl-baru">Link Website Project</label>
@@ -630,6 +741,199 @@ $pendidikan = $pdo->query('SELECT * FROM pendidikan ORDER BY urutan, id')->fetch
                     </div>
                     <div class="form-aksi">
                         <button type="submit" class="btn btn-primary">Tambah Pendidikan</button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="panel" id="pengalaman">
+                <div class="panel-head">
+                    <h2>Pengalaman & Organisasi</h2>
+                    <span class="panel-hint"><?= count($pengalaman) ?> pengalaman</span>
+                </div>
+
+                <?php foreach ($pengalaman as $item): ?>
+                <div class="entri">
+                    <div class="entri-kepala">
+                        <h3><span class="nomor"><?= esc((string) $item['urutan']) ?></span><?= esc($item['nama']) ?></h3>
+                        <?php if ($item['peran']): ?>
+                        <span class="badge merah"><?= esc($item['peran']) ?></span>
+                        <?php endif; ?>
+                    </div>
+                    <form method="post" class="form">
+                        <?= csrf_field() ?>
+                        <input type="hidden" name="aksi" value="ubah_pengalaman">
+                        <input type="hidden" name="id" value="<?= $item['id'] ?>">
+                        <div class="form-2kolom">
+                            <div class="lebar-penuh">
+                                <label for="pgn<?= $item['id'] ?>">Nama Organisasi</label>
+                                <input type="text" id="pgn<?= $item['id'] ?>" name="nama" value="<?= esc($item['nama']) ?>" required>
+                            </div>
+                            <div>
+                                <label for="pgp<?= $item['id'] ?>">Peran</label>
+                                <input type="text" id="pgp<?= $item['id'] ?>" name="peran" value="<?= esc($item['peran']) ?>">
+                            </div>
+                            <div>
+                                <label for="pgt<?= $item['id'] ?>">Tahun</label>
+                                <input type="text" id="pgt<?= $item['id'] ?>" name="tahun" value="<?= esc($item['tahun']) ?>">
+                            </div>
+                            <div>
+                                <label for="pgu<?= $item['id'] ?>">Urutan</label>
+                                <input type="number" id="pgu<?= $item['id'] ?>" name="urutan" value="<?= (int) $item['urutan'] ?>">
+                            </div>
+                            <div class="lebar-penuh">
+                                <label for="pgd<?= $item['id'] ?>">Deskripsi</label>
+                                <textarea id="pgd<?= $item['id'] ?>" name="deskripsi" rows="2"><?= esc($item['deskripsi']) ?></textarea>
+                            </div>
+                        </div>
+                        <div class="form-aksi">
+                            <button type="submit" class="btn btn-secondary">Simpan Perubahan</button>
+                            <span class="spacer"></span>
+                        </div>
+                    </form>
+                    <form method="post" class="form-aksi" onsubmit="return confirm('Hapus pengalaman ini?')">
+                        <?= csrf_field() ?>
+                        <input type="hidden" name="aksi" value="hapus_pengalaman">
+                        <input type="hidden" name="id" value="<?= $item['id'] ?>">
+                        <button type="submit" class="btn btn-danger">Hapus</button>
+                    </form>
+                </div>
+                <?php endforeach; ?>
+
+                <h3 class="panel-sub">Tambah Pengalaman</h3>
+                <form method="post" class="form">
+                    <?= csrf_field() ?>
+                    <input type="hidden" name="aksi" value="tambah_pengalaman">
+                    <div class="form-2kolom">
+                        <div class="lebar-penuh">
+                            <label for="pgn-baru">Nama Organisasi</label>
+                            <input type="text" id="pgn-baru" name="nama" required>
+                        </div>
+                        <div>
+                            <label for="pgp-baru">Peran</label>
+                            <input type="text" id="pgp-baru" name="peran" placeholder="Anggota">
+                        </div>
+                        <div>
+                            <label for="pgt-baru">Tahun</label>
+                            <input type="text" id="pgt-baru" name="tahun" placeholder="2024 – 2025">
+                        </div>
+                        <div>
+                            <label for="pgu-baru">Urutan</label>
+                            <input type="number" id="pgu-baru" name="urutan" value="0">
+                        </div>
+                        <div class="lebar-penuh">
+                            <label for="pgd-baru">Deskripsi</label>
+                            <textarea id="pgd-baru" name="deskripsi" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-aksi">
+                        <button type="submit" class="btn btn-primary">Tambah Pengalaman</button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="panel" id="sertifikat">
+                <div class="panel-head">
+                    <h2>Sertifikat</h2>
+                    <span class="panel-hint"><?= count($sertifikat) ?> sertifikat</span>
+                </div>
+
+                <?php foreach ($sertifikat as $item): ?>
+                <div class="entri">
+                    <div class="entri-kepala">
+                        <h3><span class="nomor"><?= esc((string) $item['urutan']) ?></span><?= esc($item['nama']) ?></h3>
+                        <?php if ($item['tahun']): ?>
+                        <span class="badge biru"><?= esc($item['tahun']) ?></span>
+                        <?php endif; ?>
+                    </div>
+                    <form method="post" class="form" enctype="multipart/form-data">
+                        <?= csrf_field() ?>
+                        <input type="hidden" name="aksi" value="ubah_sertifikat">
+                        <input type="hidden" name="id" value="<?= $item['id'] ?>">
+                        <div class="form-2kolom">
+                            <div class="lebar-penuh">
+                                <label for="srn<?= $item['id'] ?>">Nama Sertifikat</label>
+                                <input type="text" id="srn<?= $item['id'] ?>" name="nama" value="<?= esc($item['nama']) ?>" required>
+                            </div>
+                            <div>
+                                <label for="srp<?= $item['id'] ?>">Penerbit</label>
+                                <input type="text" id="srp<?= $item['id'] ?>" name="penerbit" value="<?= esc($item['penerbit']) ?>">
+                            </div>
+                            <div>
+                                <label for="srt<?= $item['id'] ?>">Tahun</label>
+                                <input type="text" id="srt<?= $item['id'] ?>" name="tahun" value="<?= esc($item['tahun']) ?>">
+                            </div>
+                            <div class="lebar-penuh">
+                                <label for="srl<?= $item['id'] ?>">Link Sertifikat (opsional)</label>
+                                <input type="url" id="srl<?= $item['id'] ?>" name="link" value="<?= esc($item['link']) ?>" placeholder="https://...">
+                            </div>
+                            <div>
+                                <label for="srf<?= $item['id'] ?>">Ganti Gambar (upload, opsional)</label>
+                                <input type="file" id="srf<?= $item['id'] ?>" name="gambar_file" accept="image/*">
+                            </div>
+                            <div>
+                                <label for="srg<?= $item['id'] ?>">atau path/URL Gambar</label>
+                                <input type="text" id="srg<?= $item['id'] ?>" name="gambar" value="<?= esc($item['gambar']) ?>">
+                            </div>
+                            <div>
+                                <label for="sru<?= $item['id'] ?>">Urutan</label>
+                                <input type="number" id="sru<?= $item['id'] ?>" name="urutan" value="<?= (int) $item['urutan'] ?>">
+                            </div>
+                            <?php if ($item['gambar']): ?>
+                            <div class="lebar-penuh">
+                                <img src="<?= esc(str_starts_with($item['gambar'], 'http') ? $item['gambar'] : '../' . $item['gambar']) ?>" alt="Gambar <?= esc($item['nama']) ?>" class="pratinjau">
+                            </div>
+                            <?php endif; ?>
+                        </div>
+                        <div class="form-aksi">
+                            <button type="submit" class="btn btn-secondary">Simpan Perubahan</button>
+                            <span class="spacer"></span>
+                        </div>
+                    </form>
+                    <form method="post" class="form-aksi" onsubmit="return confirm('Hapus sertifikat ini?')">
+                        <?= csrf_field() ?>
+                        <input type="hidden" name="aksi" value="hapus_sertifikat">
+                        <input type="hidden" name="id" value="<?= $item['id'] ?>">
+                        <button type="submit" class="btn btn-danger">Hapus</button>
+                    </form>
+                </div>
+                <?php endforeach; ?>
+
+                <h3 class="panel-sub">Tambah Sertifikat</h3>
+                <form method="post" class="form" enctype="multipart/form-data">
+                    <?= csrf_field() ?>
+                    <input type="hidden" name="aksi" value="tambah_sertifikat">
+                    <div class="form-2kolom">
+                        <div class="lebar-penuh">
+                            <label for="srn-baru">Nama Sertifikat</label>
+                            <input type="text" id="srn-baru" name="nama" required>
+                        </div>
+                        <div>
+                            <label for="srp-baru">Penerbit</label>
+                            <input type="text" id="srp-baru" name="penerbit">
+                        </div>
+                        <div>
+                            <label for="srt-baru">Tahun</label>
+                            <input type="text" id="srt-baru" name="tahun" placeholder="2025">
+                        </div>
+                        <div class="lebar-penuh">
+                            <label for="srl-baru">Link Sertifikat (opsional)</label>
+                            <input type="url" id="srl-baru" name="link" placeholder="https://...">
+                        </div>
+                        <div>
+                            <label for="srf-baru">Upload Gambar (opsional)</label>
+                            <input type="file" id="srf-baru" name="gambar_file" accept="image/*">
+                        </div>
+                        <div>
+                            <label for="srg-baru">atau path/URL Gambar</label>
+                            <input type="text" id="srg-baru" name="gambar" placeholder="Kosongkan jika tidak ada gambar">
+                        </div>
+                        <div>
+                            <label for="sru-baru">Urutan</label>
+                            <input type="number" id="sru-baru" name="urutan" value="0">
+                        </div>
+                    </div>
+                    <div class="form-aksi">
+                        <button type="submit" class="btn btn-primary">Tambah Sertifikat</button>
                     </div>
                 </form>
             </section>

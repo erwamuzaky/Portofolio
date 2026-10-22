@@ -4,41 +4,147 @@ require __DIR__ . '/config.php';
 try {
     $pdo = db();
 
-    $heroSapaan  = konten($pdo, 'hero', 'sapaan', 'Halo, Saya');
     $heroNama    = konten($pdo, 'hero', 'nama', 'Erwa Muzaky');
     $heroDesk    = konten($pdo, 'hero', 'deskripsi');
-    $heroFoto    = konten($pdo, 'hero', 'foto', 'foto/foto.jpeg');
 
-    $aboutBuka   = konten($pdo, 'about', 'paragraf_pembuka');
+    $aboutBuka    = konten($pdo, 'about', 'paragraf_pembuka');
     $aboutKeahlian = konten($pdo, 'about', 'keahlian');
-    $aboutOrg    = konten($pdo, 'about', 'paragraf_organisasi');
-    $aboutTutup  = konten($pdo, 'about', 'paragraf_penutup');
-    $aboutLokasi = konten($pdo, 'about', 'lokasi');
-    $aboutMaps   = konten($pdo, 'about', 'maps_src');
+    $aboutOrg     = konten($pdo, 'about', 'paragraf_organisasi');
+    $aboutTutup   = konten($pdo, 'about', 'paragraf_penutup');
+    $aboutLokasi  = konten($pdo, 'about', 'lokasi');
     $aboutJurusan = konten($pdo, 'about', 'jurusan');
-    $aboutFokus  = konten($pdo, 'about', 'fokus');
+    $aboutFokus   = konten($pdo, 'about', 'fokus');
 
     $contactEmail = konten($pdo, 'contact', 'email');
     $contactPesan = konten($pdo, 'contact', 'pesan');
     $footerTeks   = konten($pdo, 'footer', 'teks');
 
-    $daftarSosial = db()->query('SELECT nama, url FROM sosial ORDER BY urutan, id')->fetchAll();
-    $daftarProject = db()->query('SELECT judul, deskripsi, gambar, tag, link FROM project ORDER BY urutan, id')->fetchAll();
-    $daftarSkill = db()->query('SELECT nama, ikon, kategori, deskripsi FROM skill ORDER BY urutan, id')->fetchAll();
-    $daftarPendidikan = db()->query('SELECT nama, jurusan, tahun FROM pendidikan ORDER BY urutan, id')->fetchAll();
+    $daftarSosial      = $pdo->query('SELECT nama, url FROM sosial ORDER BY urutan, id')->fetchAll();
+    $daftarProject     = $pdo->query('SELECT * FROM project ORDER BY urutan, id')->fetchAll();
+    $daftarSkill       = $pdo->query('SELECT nama, ikon, kategori, deskripsi FROM skill ORDER BY urutan, id')->fetchAll();
+    $daftarPendidikan  = $pdo->query('SELECT nama, jurusan, tahun FROM pendidikan ORDER BY urutan, id')->fetchAll();
+    $daftarPengalaman  = $pdo->query('SELECT nama, peran, tahun, deskripsi FROM pengalaman ORDER BY urutan, id')->fetchAll();
+    $adaCv             = is_file(__DIR__ . '/foto/cv.pdf');
 
-    $pendidikanTerakhir = $daftarPendidikan ? end($daftarPendidikan) : null;
-    $posterPeran  = konten($pdo, 'hero', 'poster_peran', $aboutJurusan !== '' ? $aboutJurusan : 'Pelajar');
-    $posterFokus  = konten($pdo, 'hero', 'poster_fokus', $aboutFokus !== '' ? $aboutFokus : 'Web Development');
-    $posterWaktu  = konten($pdo, 'hero', 'poster_waktu', $pendidikanTerakhir['tahun'] ?? 'Sekarang');
-    $posterVertikal = konten($pdo, 'hero', 'poster_vertikal', 'PORTFOLIO — ' . strtoupper($heroNama));
+    $hardSkills = array_values(array_filter($daftarSkill, fn ($s) => $s['kategori'] === 'hard'));
+    $softSkills = array_values(array_filter($daftarSkill, fn ($s) => $s['kategori'] === 'soft'));
 
-    $hardSkills = array_filter($daftarSkill, fn ($s) => $s['kategori'] === 'hard');
-    $softSkills = array_filter($daftarSkill, fn ($s) => $s['kategori'] === 'soft');
-    $barisKeahlian = array_values(array_filter(explode('|', $aboutKeahlian)));
+    $tahunIni      = date('Y');
+    $namaDepan     = explode(' ', trim($heroNama))[0] ?? $heroNama;
+    $sekolah       = $daftarPendidikan[0]['nama'] ?? 'SMKN 3 Pariaman';
+    $tahunSekolah  = $daftarPendidikan[0]['tahun'] ?? '';
+    $rentangSekolah = trim(str_replace('(Sekarang)', '', $tahunSekolah));
+
+    $akronimJurusan = 'RPL';
+    if (preg_match('/\(([^)]+)\)/', $aboutJurusan, $cocokAkronim)) {
+        $akronimJurusan = trim($cocokAkronim[1]);
+    }
+
+    $bagianLokasi = array_values(array_filter(array_map('trim', explode(',', $aboutLokasi))));
+    if (count($bagianLokasi) >= 2) {
+        $lokasiSingkat = implode(', ', array_slice($bagianLokasi, -2));
+    } else {
+        $lokasiSingkat = $bagianLokasi[0] ?? ($aboutLokasi !== '' ? $aboutLokasi : 'Padang Pariaman, Sumatera Barat');
+    }
+
+    // Foto organisasi dipetakan dari nama pengalaman karena tabel tidak menyimpan gambar.
+    $petaFotoOrganisasi = [
+        'waketos'  => 'foto/WAKETOS.jpeg',
+        'osis'     => 'foto/WAKETOS.jpeg',
+        'paskibra' => 'foto/Paskibraka.jpeg',
+        'pramuka'  => 'foto/Pramuka.jpeg',
+        'pks'      => 'foto/PKS.jpeg',
+    ];
+
+    $fotoPengalaman = static function (string $nama) use ($petaFotoOrganisasi): ?string {
+        $huruf = strtolower($nama);
+        foreach ($petaFotoOrganisasi as $kunci => $jalur) {
+            if (str_contains($huruf, $kunci)) {
+                return $jalur;
+            }
+        }
+        return null;
+    };
+
+    $polaroidOrganisasi = [];
+    foreach ($daftarPengalaman as $org) {
+        $fotoOrg = $fotoPengalaman($org['nama']);
+        if ($fotoOrg !== null) {
+            $polaroidOrganisasi[] = [
+                'nama'  => $org['nama'],
+                'peran' => $org['peran'],
+                'foto'  => $fotoOrg,
+            ];
+        }
+    }
+
+    // Baris keahlian pada bagian tentang: "Label: penjelasan" dipisah dengan tanda |.
+    $barisKeahlian = [];
+    foreach (array_filter(array_map('trim', explode('|', $aboutKeahlian))) as $baris) {
+        $posisi = strpos($baris, ':');
+        if ($posisi === false) {
+            $barisKeahlian[] = ['label' => $baris, 'teks' => ''];
+        } else {
+            $barisKeahlian[] = [
+                'label' => trim(substr($baris, 0, $posisi)),
+                'teks'  => trim(substr($baris, $posisi + 1)),
+            ];
+        }
+    }
+
+    // Kalimat terakhir dari paragraf penutup dipakai sebagai kutipan.
+    $kalimatTutup = preg_split('/(?<=[.!?])\s+/', trim($aboutTutup), -1, PREG_SPLIT_NO_EMPTY) ?: [];
+    if (count($kalimatTutup) > 1) {
+        $kutipan = array_pop($kalimatTutup);
+        $paragrafTutup = implode(' ', $kalimatTutup);
+    } else {
+        $kutipan = $kalimatTutup[0] ?? '';
+        $paragrafTutup = '';
+    }
+
+    $penandaSkill = [
+        'HTML'       => 'HT',
+        'CSS'        => 'CS',
+        'C++'        => 'C+',
+        'JAVA'       => 'JV',
+        'PHP'        => 'PH',
+        'LARAVEL'    => 'LV',
+        'MYSQL'      => 'MY',
+        'FLUTTER'    => 'FL',
+        'JAVASCRIPT' => 'JS',
+        'TAILWIND'   => 'TW',
+        'BOOTSTRAP'  => 'BS',
+        'GIT'        => 'GT',
+        'FIGMA'      => 'FG',
+    ];
+
+    $labelSkill = [
+        'HTML'       => 'Markup',
+        'CSS'        => 'Styling',
+        'C++'        => 'Logic',
+        'JAVA'       => 'OOP',
+        'PHP'        => 'Backend',
+        'LARAVEL'    => 'Framework',
+        'MYSQL'      => 'Database',
+        'FLUTTER'    => 'Mobile',
+        'JAVASCRIPT' => 'Script',
+        'TAILWIND'   => 'Utility CSS',
+        'BOOTSTRAP'  => 'Framework',
+        'GIT'        => 'Versioning',
+        'FIGMA'      => 'Design',
+    ];
 } catch (PDOException $e) {
     http_response_code(500);
     exit('<p style="font-family:sans-serif;padding:2rem">Database belum bisa dihubungi. Pastikan MySQL jalan lalu impor <code>setup.sql</code>.</p>');
+}
+
+$skema = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+$host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+$urlSitus = $skema . '://' . $host . strtok($_SERVER['REQUEST_URI'] ?? '/', '?');
+$gambarBagikan = $skema . '://' . $host . '/foto/foto.webp';
+$metaDeskripsi = trim(preg_replace('/\s+/', ' ', $heroDesk) ?? '');
+if (mb_strlen($metaDeskripsi) > 158) {
+    $metaDeskripsi = mb_substr($metaDeskripsi, 0, 155) . '...';
 }
 ?>
 <!DOCTYPE html>
@@ -47,371 +153,495 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= esc($heroNama) ?> | Portofolio</title>
+    <title><?= esc($heroNama) ?> — The Daily Bugle</title>
+    <meta name="description" content="<?= esc($metaDeskripsi) ?>">
+    <meta name="author" content="<?= esc($heroNama) ?>">
+    <link rel="canonical" href="<?= esc($urlSitus) ?>">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="<?= esc($heroNama) ?> — The Daily Bugle">
+    <meta property="og:description" content="<?= esc($metaDeskripsi) ?>">
+    <meta property="og:image" content="<?= esc($gambarBagikan) ?>">
+    <meta property="og:url" content="<?= esc($urlSitus) ?>">
+    <meta property="og:locale" content="id_ID">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<?= esc($heroNama) ?> — The Daily Bugle">
+    <meta name="twitter:description" content="<?= esc($metaDeskripsi) ?>">
+    <meta name="twitter:image" content="<?= esc($gambarBagikan) ?>">
+    <link rel="preload" as="image" href="foto/wajah-potong.png" fetchpriority="high">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Anton&family=Instrument+Serif:ital@1&family=Caveat:wght@600&display=swap">
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%23090b12'/%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%23e23636' stroke-width='2'/%3E%3Cpath d='M16 3v26M3 16h26M7 7l18 18M25 7L7 25' stroke='%234f7dff' stroke-width='1' opacity='.55'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23e23636'/%3E%3C/svg%3E">
-    <script>document.documentElement.classList.add('js');</script>
-    <script>
-        (function () {
-            try {
-                if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                    document.documentElement.classList.add('loader-selesai');
-                    return;
-                }
-                var catatan = localStorage.getItem('jaring_loader_waktu');
-                var batasJam = 12 * 60 * 60 * 1000;
-                var baru = catatan && (Date.now() - parseInt(catatan, 10)) < batasJam;
-                if (!baru) {
-                    document.documentElement.classList.add('loader-aktif');
-                } else {
-                    document.documentElement.classList.add('loader-selesai');
-                }
-            } catch (e) {
-                document.documentElement.classList.add('loader-selesai');
-            }
-        })();
-    </script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Space+Mono:wght@400;700&family=UnifrakturCook:wght@700&display=swap">
+    <link rel="stylesheet" href="style-beranda.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%23f3ebdd'/%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%23141414' stroke-width='2'/%3E%3Cpath d='M16 3v26M3 16h26M7 7l18 18M25 7L7 25' stroke='%230b4f8a' stroke-width='1' opacity='.55'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23d8232a'/%3E%3C/svg%3E">
 </head>
 
 <body>
+    <a class="skip-link" href="#main">Lewati ke konten utama</a>
 
-    <header>
-        <div class="header-dalam">
-            <div class="gelantungan" aria-hidden="true">
-                <span class="gelantungan-benang"></span>
-                <img class="gelantungan-laba" src="foto/elements/gelantungan.webp" alt="" width="240" height="320" loading="eager" decoding="async">
+    <div class="edition-bar">
+        <div class="wrap">
+            <span>Edisi Digital · <?= $tahunIni ?></span>
+            <span>Vol. 01 — No. 03</span>
+            <span><?= esc($lokasiSingkat) ?></span>
+            <span>Harga: Gratis</span>
+        </div>
+    </div>
+
+    <header class="masthead">
+        <div class="wrap">
+            <div class="masthead-top">
+                <div class="masthead-side">
+                    <strong>Cuaca hari ini</strong>
+                    Cerah berawan di atas laptop.<br>
+                    Peluang bug: rendah.
+                </div>
+                <div class="masthead-title">
+                    <div class="masthead-name">The Daily Bugle</div>
+                    <p>Portofolio Edisi Khusus · <?= esc($heroNama) ?></p>
+                </div>
+                <div class="masthead-side" style="text-align:right">
+                    <strong>Fotografer</strong>
+                    <?= esc($heroNama) ?><br>
+                    <span class="masthead-kicker">Edisi Pemula</span>
+                </div>
             </div>
-            <nav aria-label="Navigasi utama">
-                <a href="#home">Home</a>
-                <a href="#about">About</a>
-                <a href="#project">Project</a>
-                <a href="#contact">Contact</a>
-            </nav>
+            <div class="masthead-rule">
+                <span>“Berita terpercaya dari lingkungan sekitar”</span>
+                <div class="masthead-logo" aria-hidden="true"></div>
+                <span><?= esc($sekolah) ?> · <?= esc($akronimJurusan) ?></span>
+            </div>
         </div>
     </header>
 
-    <div class="ornamen-jaring ornamen-kanan-atas" aria-hidden="true">
-        <svg viewBox="0 0 300 300" focusable="false">
-            <g fill="none" stroke="currentColor" stroke-width="1">
-                <circle cx="300" cy="0" r="50" />
-                <circle cx="300" cy="0" r="100" />
-                <circle cx="300" cy="0" r="150" />
-                <circle cx="300" cy="0" r="200" />
-                <circle cx="300" cy="0" r="250" />
-                <path d="M0 300 L300 0 M0 0 L300 300 M0 0 L300 0" />
-                <path d="M300 50 Q230 70 200 100 Q170 130 150 200 Q130 270 50 300" />
-                <path d="M50 0 Q70 70 100 100 Q130 130 200 150 Q270 170 300 250" />
-                <path d="M150 0 Q160 90 200 100 Q240 110 250 150" />
-                <path d="M0 150 Q90 160 100 200 Q110 240 150 250" />
-            </g>
-        </svg>
-    </div>
+    <nav class="main-nav" id="nav" aria-label="Navigasi utama">
+        <div class="wrap">
+            <a class="nav-brand" href="#beranda">The Daily Bugle / <?= esc($namaDepan) ?></a>
+            <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="navLinks">Menu</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#beranda" class="active">Beranda</a></li>
+                <li><a href="#tentang">Tentang</a></li>
+                <li><a href="#keahlian">Keahlian</a></li>
+                <li><a href="#pendidikan">Pendidikan</a></li>
+                <li><a href="#pengalaman">Pengalaman</a></li>
+                <li><a href="#project">Project</a></li>
+                <li><a href="#kontak">Kontak</a></li>
+            </ul>
+        </div>
+    </nav>
 
-    <div class="ornamen-jaring ornamen-kiri-bawah" aria-hidden="true">
-        <svg viewBox="0 0 300 300" focusable="false">
-            <g fill="none" stroke="currentColor" stroke-width="1">
-                <circle cx="0" cy="300" r="50" />
-                <circle cx="0" cy="300" r="100" />
-                <circle cx="0" cy="300" r="150" />
-                <circle cx="0" cy="300" r="200" />
-                <circle cx="0" cy="300" r="250" />
-                <path d="M0 0 L300 300 M0 300 L300 0 M0 300 L300 300" />
-                <path d="M0 250 Q70 230 100 200 Q130 170 150 100 Q170 30 250 0" />
-                <path d="M250 300 Q230 230 200 200 Q170 170 100 150 Q30 130 0 50" />
-                <path d="M150 300 Q140 210 100 200 Q60 190 50 150" />
-                <path d="M300 150 Q210 140 200 100 Q190 60 150 50" />
-            </g>
-        </svg>
-    </div>
-
-    <div class="ornamen-jaring ornamen-laba" aria-hidden="true">
-        <svg viewBox="0 0 120 120" focusable="false">
-            <g fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M52 62 Q34 52 22 62 Q30 46 20 36" />
-                <path d="M50 70 Q30 66 20 78 Q26 60 16 52" />
-                <path d="M52 78 Q34 82 26 96 Q30 78 20 72" />
-                <path d="M56 84 Q46 98 44 112 Q40 96 34 90" />
-                <path d="M68 62 Q86 52 98 62 Q90 46 100 36" />
-                <path d="M70 70 Q90 66 100 78 Q94 60 104 52" />
-                <path d="M68 78 Q86 82 94 96 Q90 78 100 72" />
-                <path d="M64 84 Q74 98 76 112 Q80 96 86 90" />
-            </g>
-            <g fill="currentColor">
-                <ellipse cx="60" cy="76" rx="15" ry="18" />
-                <ellipse cx="60" cy="55" rx="11" ry="10" />
-                <path d="M49 50 L44 44 M71 50 L76 44" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
-            </g>
-        </svg>
-    </div>
-
-    <main>
-
-        <!-- ================= 1. HOME / HERO (POSTER) ================= -->
-        <?php
-        $bagianNama = preg_split('/\s+/', trim($heroNama), 2);
-        $namaBaris1 = $bagianNama[0] ?? $heroNama;
-        $namaBaris2 = $bagianNama[1] ?? '';
-        ?>
-        <section id="home" class="hero hero-poster">
-            <svg class="poster-jaring" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
-                <g fill="none" stroke="currentColor" stroke-width="1">
-                    <circle cx="200" cy="200" r="40" />
-                    <circle cx="200" cy="200" r="80" />
-                    <circle cx="200" cy="200" r="120" />
-                    <circle cx="200" cy="200" r="160" />
-                    <circle cx="200" cy="200" r="200" />
-                    <path d="M200 0 L200 400 M0 200 L400 200 M59 59 L341 341 M341 59 L59 341" />
-                    <path d="M200 40 Q260 60 283 117 Q317 140 360 200" />
-                    <path d="M200 40 Q140 60 117 117 Q83 140 40 200" />
-                    <path d="M200 40 Q260 60 283 117 Q317 140 360 200" transform="rotate(90 200 200)" />
-                    <path d="M200 40 Q140 60 117 117 Q83 140 40 200" transform="rotate(90 200 200)" />
-                    <path d="M200 40 Q260 60 283 117 Q317 140 360 200" transform="rotate(180 200 200)" />
-                    <path d="M200 40 Q140 60 117 117 Q83 140 40 200" transform="rotate(180 200 200)" />
-                    <path d="M200 40 Q260 60 283 117 Q317 140 360 200" transform="rotate(270 200 200)" />
-                    <path d="M200 40 Q140 60 117 117 Q83 140 40 200" transform="rotate(270 200 200)" />
-                </g>
-            </svg>
-
-            <svg class="poster-sinar" viewBox="0 0 300 220" aria-hidden="true" focusable="false">
-                <g stroke="currentColor" stroke-linecap="round" fill="none">
-                    <path d="M0 220 L120 60" stroke-width="2" />
-                    <path d="M18 220 L132 78" stroke-width="1.4" />
-                    <path d="M38 220 L146 96" stroke-width="1" />
-                    <path d="M0 190 L96 44" stroke-width="1.4" />
-                    <path d="M0 158 L72 30" stroke-width="1" />
-                </g>
-            </svg>
-
-            <div class="poster-kiri">
-                <p class="poster-sapaan"><?= esc($heroSapaan) ?></p>
-
-                <h1 class="poster-judul">
-                    <span class="poster-baris1"><?= esc($namaBaris1) ?></span>
-                    <?php if ($namaBaris2 !== ''): ?>
-                    <span class="poster-script"><?= esc($namaBaris2) ?></span>
-                    <?php endif; ?>
-                    <span class="poster-baris2">Portofolio</span>
-                </h1>
-
-                <p class="poster-desk"><?= esc($heroDesk) ?></p>
-
-                <div class="hero-buttons poster-tombol">
-                    <a href="#project" class="btn btn-primary">Lihat Project</a>
-                    <a href="#contact" class="btn btn-secondary">Hubungi Saya</a>
+    <main id="main">
+        <!-- ================= 1. BERANDA ================= -->
+        <section class="hero wrap" id="beranda" aria-labelledby="hero-title">
+            <div class="hero-kicker mono">
+                <span>Laporan Utama · Halaman 01</span>
+                <span>Spider-Man Menyetujui</span>
+            </div>
+            <div class="hero-grid">
+                <div class="hero-copy">
+                    <h1 id="hero-title">
+                        <span>Friendly</span>
+                        <span>Neighborhood</span>
+                        <span class="red">Developer</span>
+                    </h1>
+                    <p class="hero-dek"><?= esc($heroDesk) ?></p>
+                    <div class="byline">
+                        <span>Oleh <strong><?= esc($heroNama) ?></strong></span>
+                        <span><?= esc($sekolah) ?></span>
+                        <span><?= esc($akronimJurusan) ?><?= $rentangSekolah !== '' ? ' · ' . esc($rentangSekolah) : '' ?></span>
+                    </div>
+                    <div class="hero-actions">
+                        <a class="btn" href="#project">Lihat Project</a>
+                        <a class="btn btn-outline" href="#kontak">Kirim Pesan</a>
+                        <?php if ($adaCv): ?>
+                        <a class="btn btn-outline" href="foto/cv.pdf" download>Unduh CV</a>
+                        <?php endif; ?>
+                    </div>
                 </div>
 
-                <ul class="poster-label">
-                    <li>
-                        <span class="poster-label-kunci">Role</span>
-                        <span class="poster-label-nilai"><?= esc($posterPeran) ?></span>
-                    </li>
-                    <li>
-                        <span class="poster-label-kunci">Focus</span>
-                        <span class="poster-label-nilai"><?= esc($posterFokus) ?></span>
-                    </li>
-                    <li>
-                        <span class="poster-label-kunci">Time</span>
-                        <span class="poster-label-nilai"><?= esc($posterWaktu) ?></span>
-                    </li>
-                </ul>
+                <figure class="hero-figure">
+                    <div class="halftone" aria-hidden="true"></div>
+                    <div class="blue-block" aria-hidden="true"></div>
+                    <div class="face-toggle" role="group" aria-label="Pilih tampilan figur">
+                        <button type="button" data-face="wajah" aria-pressed="true">Wajah</button>
+                        <button type="button" data-face="topeng" aria-pressed="false">Topeng</button>
+                    </div>
+                    <div class="figure-stack">
+                        <img id="heroFace" src="foto/wajah-potong.png" alt="<?= esc($heroNama) ?> dalam kostum Spider-Man tanpa topeng" width="454" height="1110" fetchpriority="high" decoding="async">
+                        <img id="heroMask" class="is-hidden" src="foto/topeng-potong.png" alt="<?= esc($heroNama) ?> dalam kostum Spider-Man dengan topeng" width="454" height="1110" loading="lazy" decoding="async">
+                    </div>
+                    <figcaption id="heroCaption" data-nama="<?= esc($heroNama) ?>" data-tahun="<?= $tahunIni ?>">Foto: <?= esc($heroNama) ?> / <?= $tahunIni ?> · Figur: versi wajah</figcaption>
+                    <div class="stamp" aria-hidden="true">Spider-Man<br>Menyetujui<br>★★★★★</div>
+                </figure>
             </div>
 
-            <p class="poster-vertikal"><?= esc($posterVertikal) ?></p>
-
-            <div class="poster-figur" id="posterFigur">
-                <svg class="poster-reticle" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
-                    <g fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="200" cy="200" r="150" />
-                        <circle cx="200" cy="200" r="168" stroke-dasharray="10 14" stroke-width="1.2" />
-                        <path d="M200 30 L200 70 M200 330 L200 370 M30 200 L70 200 M330 200 L370 200" />
-                        <path d="M112 112 L136 136 M288 112 L264 136 M112 288 L136 264 M288 288 L264 264" stroke-width="1.4" />
-                    </g>
-                </svg>
-
-                <div class="figur-tumpuk" id="figurTumpuk">
-                    <img class="figur-topeng" src="foto/topeng.webp" alt="Siluet figur bertopeng" width="900" height="1200" loading="eager">
-                    <img class="figur-wajah" id="figurWajah" src="foto/wajah.webp" alt="Foto wajah Erwa Muzaky" width="900" height="1200" loading="eager">
-                </div>
-
-                <button type="button" class="figur-tombol" id="figurTombol" aria-label="Tukar tampilan antara topeng dan wajah" aria-pressed="false" hidden></button>
+            <div class="stats" aria-label="Ringkasan portofolio">
+                <div><strong><?= count($daftarProject) ?></strong><span>Project<br>terdokumentasi</span></div>
+                <div><strong><?= count($daftarPengalaman) ?></strong><span>Organisasi<br>yang diikuti</span></div>
+                <div><strong><?= count($daftarSkill) ?></strong><span>Skill<br>terlatih</span></div>
             </div>
         </section>
 
-        <!-- ================= 2. ABOUT ================= -->
-        <section id="about">
+        <!-- ================= 2. TENTANG ================= -->
+        <section class="section wrap reveal" id="tentang" aria-labelledby="tentang-title">
             <div class="section-head">
-                <span class="section-label"><span class="section-balok" aria-hidden="true"></span>01 — About</span>
-                <h2>About Me</h2>
+                <div class="kicker">Halaman 02<br>Profil</div>
+                <h2 id="tentang-title">Di Balik Topeng</h2>
+                <div class="page-no">Bagian<strong>02</strong></div>
             </div>
 
-            <div class="about-grid reveal">
-                <div class="about-bio">
-                    <p><?= esc($aboutBuka) ?></p>
+            <div class="about-grid">
+                <div class="about-copy">
+                    <?php if ($aboutBuka !== ''): ?>
+                    <p class="dropcap"><?= esc($aboutBuka) ?></p>
+                    <?php endif; ?>
 
                     <?php if ($barisKeahlian): ?>
-                    <ul class="about-list">
+                    <ul class="skill-lines">
                         <?php foreach ($barisKeahlian as $baris): ?>
-                        <li><?= esc($baris) ?></li>
+                        <li>
+                            <strong><?= esc($baris['label']) ?></strong>
+                            <span><?= esc($baris['teks']) ?></span>
+                        </li>
                         <?php endforeach; ?>
                     </ul>
                     <?php endif; ?>
 
+                    <?php if ($aboutOrg !== ''): ?>
                     <p><?= esc($aboutOrg) ?></p>
+                    <?php endif; ?>
 
-                    <div class="org-grid">
-                        <figure class="org-card">
-                            <img src="foto/WAKETOS.jpeg" alt="Wakil Ketua OSIS" loading="lazy">
-                            <figcaption>Wakil Ketua OSIS</figcaption>
+                    <?php if ($paragrafTutup !== ''): ?>
+                    <p><?= esc($paragrafTutup) ?></p>
+                    <?php endif; ?>
+
+                    <?php if ($kutipan !== ''): ?>
+                    <blockquote class="pullquote">“<?= esc($kutipan) ?>”<cite>— <?= esc($heroNama) ?></cite></blockquote>
+                    <?php endif; ?>
+
+                    <?php if ($polaroidOrganisasi): ?>
+                    <div class="polaroids" aria-label="Foto kegiatan organisasi">
+                        <?php foreach (array_slice($polaroidOrganisasi, 0, 4) as $foto): ?>
+                        <figure class="polaroid">
+                            <img <?= atribut_gambar($foto['foto'], '(max-width: 560px) calc(50vw - 24px), 190px') ?> alt="Kegiatan <?= esc($foto['nama']) ?>" loading="lazy" decoding="async">
+                            <figcaption><?= esc($foto['nama']) ?><br><?= esc($foto['peran']) ?></figcaption>
                         </figure>
-                        <figure class="org-card">
-                            <img src="foto/Paskibraka.jpeg" alt="Paskibraka" loading="lazy">
-                            <figcaption>Paskibraka</figcaption>
-                        </figure>
-                        <figure class="org-card">
-                            <img src="foto/Pramuka.jpeg" alt="Pramuka" loading="lazy">
-                            <figcaption>Pramuka</figcaption>
-                        </figure>
-                        <figure class="org-card">
-                            <img src="foto/PKS.jpeg" alt="PKS" loading="lazy">
-                            <figcaption>PKS</figcaption>
-                        </figure>
+                        <?php endforeach; ?>
                     </div>
-
-                    <p><?= esc($aboutTutup) ?></p>
+                    <?php endif; ?>
                 </div>
 
-                <aside class="info-card">
-                    <div class="map-wrapper">
-                        <iframe src="<?= esc($aboutMaps) ?>" title="Peta lokasi" width="100%" height="170" loading="lazy" allowfullscreen></iframe>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Lokasi Tempat Tinggal</span>
-                        <p class="info-val"><?= esc($aboutLokasi) ?></p>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Jurusan Saat Ini</span>
-                        <p class="info-val"><?= esc($aboutJurusan) ?></p>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Fokus Keahlian</span>
-                        <p class="info-val"><?= esc($aboutFokus) ?></p>
+                <aside class="side-card" aria-label="Kartu identitas">
+                    <header>Kartu Identitas / 02</header>
+                    <dl>
+                        <?php if ($heroNama !== ''): ?>
+                        <dt>Nama</dt>
+                        <dd><?= esc($heroNama) ?></dd>
+                        <?php endif; ?>
+                        <?php if ($sekolah !== ''): ?>
+                        <dt>Sekolah</dt>
+                        <dd><?= esc($sekolah) ?></dd>
+                        <?php endif; ?>
+                        <?php if ($aboutJurusan !== ''): ?>
+                        <dt>Jurusan</dt>
+                        <dd><?= esc($aboutJurusan) ?></dd>
+                        <?php endif; ?>
+                        <?php if ($aboutFokus !== ''): ?>
+                        <dt>Fokus</dt>
+                        <dd><?= esc($aboutFokus) ?></dd>
+                        <?php endif; ?>
+                        <?php if ($aboutLokasi !== ''): ?>
+                        <dt>Lokasi</dt>
+                        <dd><?= esc($aboutLokasi) ?></dd>
+                        <?php endif; ?>
+                        <?php if ($tahunSekolah !== ''): ?>
+                        <dt>Status</dt>
+                        <dd><?= esc($tahunSekolah) ?></dd>
+                        <?php endif; ?>
+                    </dl>
+                    <div class="side-sticker">
+                        <img src="foto/gelantungan-potong.png" alt="" width="146" height="271" loading="lazy" decoding="async">
+                        <p>“Tetap belajar, tetap merangkak naik.”</p>
                     </div>
                 </aside>
             </div>
-
-            <!-- HARD SKILLS -->
-            <div class="skills-block reveal">
-                <h3 class="sub-title">Hard Skills</h3>
-                <ul class="skills-grid">
-                    <?php foreach ($hardSkills as $skill): ?>
-                    <li class="skill-card" style="--delay: 0ms">
-                        <?php if ($skill['ikon']): ?>
-                        <img src="<?= esc($skill['ikon']) ?>" alt="" loading="lazy">
-                        <?php endif; ?>
-                        <span><?= esc($skill['nama']) ?></span>
-                    </li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-
-            <!-- SOFT SKILLS -->
-            <div class="skills-block reveal">
-                <h3 class="sub-title">Soft Skills</h3>
-                <ul class="soft-skills-grid">
-                    <?php foreach ($softSkills as $skill): ?>
-                    <li class="soft-card">
-                        <h4><?= esc($skill['nama']) ?></h4>
-                        <p><?= esc($skill['deskripsi']) ?></p>
-                    </li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-
-            <!-- RIWAYAT PENDIDIKAN -->
-            <div class="education-block reveal">
-                <h3 class="sub-title">Riwayat Pendidikan</h3>
-                <ol class="timeline">
-                    <?php foreach ($daftarPendidikan as $didik): ?>
-                    <li class="timeline-item">
-                        <span class="timeline-dot" aria-hidden="true"></span>
-                        <div class="timeline-card">
-                            <h4><?= esc($didik['nama']) ?></h4>
-                            <p class="timeline-sub"><?= esc($didik['jurusan']) ?></p>
-                            <span class="timeline-badge"><?= esc($didik['tahun']) ?></span>
-                        </div>
-                    </li>
-                    <?php endforeach; ?>
-                </ol>
-            </div>
         </section>
 
-        <!-- ================= 3. PROJECT ================= -->
-        <section id="project">
+        <!-- ================= 3. KEAHLIAN ================= -->
+        <?php if ($hardSkills || $softSkills): ?>
+        <section class="section wrap reveal" id="keahlian" aria-labelledby="keahlian-title">
             <div class="section-head">
-                <span class="section-label"><span class="section-balok" aria-hidden="true"></span>02 — Project</span>
-                <h2>My Project</h2>
+                <div class="kicker">Halaman 03<br>Kekuatan</div>
+                <h2 id="keahlian-title">Kekuatan &amp; Jaring</h2>
+                <div class="page-no">Bagian<strong>03</strong></div>
             </div>
-            <ul class="projects-grid">
-                <?php foreach ($daftarProject as $i => $proyek): ?>
-                <li class="project-bungkus reveal" style="--delay: <?= min($i, 5) * 70 ?>ms">
-                    <article class="project-card">
-                    <?php if ($proyek['gambar']): ?>
-                    <div class="project-img-bungkus">
-                        <img src="<?= esc($proyek['gambar']) ?>" alt="Tampilan <?= esc($proyek['judul']) ?>" class="project-img" loading="lazy">
+
+            <div class="skills-top">
+                <?php if ($hardSkills): ?>
+                <div>
+                    <div class="soft-head tanpa-jarak">
+                        <h3>Hard Skills</h3>
+                        <span class="mono"><?= count($hardSkills) ?> kemampuan teknis</span>
                     </div>
-                    <?php endif; ?>
-                    <h3><?= esc($proyek['judul']) ?></h3>
-                    <p><?= esc($proyek['deskripsi']) ?></p>
-                    <?php if ($proyek['tag'] || $proyek['link']): ?>
-                    <div class="tech-tags">
-                        <?php if ($proyek['tag']): ?>
-                        <span class="tech-tag"><?= esc($proyek['tag']) ?></span>
-                        <?php endif; ?>
-                        <?php if ($proyek['link']): ?>
-                        <a href="<?= esc($proyek['link']) ?>" class="project-link" target="_blank" rel="noopener">
-                            Kunjungi Project
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
-                        </a>
-                        <?php endif; ?>
+                    <div class="power-grid">
+                        <?php foreach ($hardSkills as $index => $skill): ?>
+                        <?php
+                        $kunciSkill = strtoupper(preg_replace('/[^A-Za-z0-9+]/', '', $skill['nama']) ?? '');
+                        $penanda = $penandaSkill[$kunciSkill] ?? ($kunciSkill !== '' ? substr($kunciSkill, 0, 2) : 'SK');
+                        $label = $labelSkill[$kunciSkill] ?? 'Skill';
+                        ?>
+                        <div class="power">
+                            <span class="power-mark" aria-hidden="true"><?= esc($penanda) ?></span>
+                            <strong><?= esc($skill['nama']) ?></strong>
+                            <small><?= str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) ?> / <?= esc($label) ?></small>
+                        </div>
+                        <?php endforeach; ?>
                     </div>
-                    <?php endif; ?>
-                    </article>
-                </li>
+                </div>
+                <?php endif; ?>
+
+                <?php if ($softSkills): ?>
+                <div>
+                    <div class="soft-head">
+                        <h3>Soft Skills</h3>
+                        <span class="mono"><?= count($softSkills) ?> kekuatan tim</span>
+                    </div>
+                    <div class="soft-grid">
+                        <?php foreach ($softSkills as $index => $skill): ?>
+                        <article class="soft">
+                            <div class="num"><?= str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) ?></div>
+                            <div>
+                                <h4><?= esc($skill['nama']) ?></h4>
+                                <p><?= esc($skill['deskripsi']) ?></p>
+                            </div>
+                        </article>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+                <?php endif; ?>
+            </div>
+        </section>
+        <?php endif; ?>
+
+        <!-- ================= 4. PENDIDIKAN ================= -->
+        <?php if ($daftarPendidikan): ?>
+        <section class="section wrap reveal" id="pendidikan" aria-labelledby="pendidikan-title">
+            <div class="section-head">
+                <div class="kicker">Halaman 04<br>Riwayat</div>
+                <h2 id="pendidikan-title">Jejak Pendidikan</h2>
+                <div class="page-no">Bagian<strong>04</strong></div>
+            </div>
+
+            <div class="edu-list">
+                <?php foreach ($daftarPendidikan as $didik): ?>
+                <article class="edu">
+                    <div class="year"><?= esc($didik['tahun']) ?></div>
+                    <div>
+                        <h3><?= esc($didik['nama']) ?></h3>
+                        <p><?= esc($didik['jurusan']) ?></p>
+                    </div>
+                    <div class="level"><?= str_contains($didik['tahun'], 'Sekarang') ? 'Sekarang' : 'Selesai' ?></div>
+                </article>
                 <?php endforeach; ?>
-            </ul>
-        </section>
-
-        <!-- ================= 4. CONTACT ================= -->
-        <section id="contact">
-            <div class="contact-box reveal">
-                <span class="section-label"><span class="section-balok" aria-hidden="true"></span>03 — Contact</span>
-                <h2>Contact Me</h2>
-                <p><?= esc($contactPesan) ?></p>
-
-                <a href="mailto:<?= esc($contactEmail) ?>" class="btn btn-primary contact-btn"><?= esc($contactEmail) ?></a>
-
-                <ul class="social-links">
-                    <?php foreach ($daftarSosial as $sosial): ?>
-                    <li><a href="<?= esc($sosial['url']) ?>" target="_blank" rel="noopener"><?= esc($sosial['nama']) ?></a></li>
-                    <?php endforeach; ?>
-                </ul>
             </div>
         </section>
+        <?php endif; ?>
 
+        <!-- ================= 5. PENGALAMAN ================= -->
+        <?php if ($daftarPengalaman): ?>
+        <section class="section wrap reveal" id="pengalaman" aria-labelledby="pengalaman-title">
+            <div class="section-head">
+                <div class="kicker">Halaman 05<br>Liputan</div>
+                <h2 id="pengalaman-title">Liputan Lapangan</h2>
+                <div class="page-no">Bagian<strong>05</strong></div>
+            </div>
+
+            <div class="exp-grid">
+                <?php foreach ($daftarPengalaman as $kerja): ?>
+                <?php $fotoKerja = $fotoPengalaman($kerja['nama']); ?>
+                <article class="exp<?= $fotoKerja === null ? ' tanpa-gambar' : '' ?>">
+                    <?php if ($fotoKerja !== null): ?>
+                    <div class="exp-img">
+                        <img <?= atribut_gambar($fotoKerja, '(max-width: 560px) calc(100vw - 32px), (max-width: 1080px) calc(100vw - 48px), 260px') ?> alt="Kegiatan <?= esc($kerja['nama']) ?>" loading="lazy" decoding="async">
+                    </div>
+                    <?php endif; ?>
+                    <div class="exp-body">
+                        <span class="org"><?= esc($kerja['nama']) ?></span>
+                        <h3><?= esc($kerja['peran']) ?></h3>
+                        <p><?= esc($kerja['deskripsi']) ?></p>
+                    </div>
+                </article>
+                <?php endforeach; ?>
+            </div>
+        </section>
+        <?php endif; ?>
+
+        <!-- ================= 6. PROJECT ================= -->
+        <section class="section wrap reveal" id="project" aria-labelledby="project-title">
+            <div class="section-head">
+                <div class="kicker">Halaman 06<br>Edisi Terbit</div>
+                <h2 id="project-title">Project Pilihan</h2>
+                <div class="page-no">Bagian<strong>06</strong></div>
+            </div>
+
+            <?php if ($daftarProject): ?>
+            <div class="clip-grid">
+                <?php foreach ($daftarProject as $index => $proyek): ?>
+                <?php
+                $tags = array_values(array_filter(array_map('trim', explode(',', $proyek['tag']))));
+                $jenisProject = 'Web';
+                foreach ($tags as $tag) {
+                    if (str_contains(strtolower($tag), 'flutter')) {
+                        $jenisProject = 'Mobile';
+                        break;
+                    }
+                }
+
+                $ringkasan = trim(preg_replace('/\s+/', ' ', $proyek['deskripsi']) ?? '');
+                if (mb_strlen($ringkasan) > 150) {
+                    $ringkasan = mb_substr($ringkasan, 0, 147) . '...';
+                }
+
+                $sumberDetail = trim($proyek['detail'] !== '' ? $proyek['detail'] : $proyek['deskripsi']);
+                $paragrafDetail = $sumberDetail === '' ? [] : (preg_split('/\R{2,}/', $sumberDetail) ?: []);
+
+                $nomorProject = str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT);
+                $idDialog = 'project-' . (int) $proyek['id'];
+                $metaProject = array_values(array_filter([
+                    $proyek['peran'],
+                    $proyek['tahun'],
+                    implode(', ', $tags),
+                ], fn ($nilai) => $nilai !== ''));
+                ?>
+                <article class="clip">
+                    <?php if ($proyek['gambar']): ?>
+                    <div class="clip-img">
+                        <img <?= atribut_gambar($proyek['gambar'], '(max-width: 860px) 42vw, 360px') ?> alt="Tampilan <?= esc($proyek['judul']) ?>" loading="lazy" decoding="async">
+                    </div>
+                    <?php endif; ?>
+                    <div class="clip-body">
+                        <span class="clip-label">Project <?= $nomorProject ?> / <?= $jenisProject ?></span>
+                        <h3><?= esc($proyek['judul']) ?></h3>
+                        <?php if ($metaProject): ?>
+                        <p class="clip-meta"><?= esc(implode(' · ', $metaProject)) ?></p>
+                        <?php endif; ?>
+                        <p class="excerpt"><?= esc($ringkasan) ?></p>
+                        <button class="link-btn" type="button" data-dialog="<?= esc($idDialog) ?>">Baca Edisi →</button>
+                    </div>
+
+                    <dialog id="<?= esc($idDialog) ?>" aria-labelledby="judul-<?= esc($idDialog) ?>">
+                        <div class="dialog-inner">
+                            <div class="dialog-head">
+                                <div>
+                                    <span class="mono">Project <?= $nomorProject ?> / <?= $jenisProject ?></span>
+                                    <h3 id="judul-<?= esc($idDialog) ?>"><?= esc($proyek['judul']) ?></h3>
+                                </div>
+                                <button class="dialog-close" type="button" data-close aria-label="Tutup detail">×</button>
+                            </div>
+
+                            <?php if ($proyek['gambar']): ?>
+                            <img class="dialog-img" <?= atribut_gambar($proyek['gambar'], '(max-width: 720px) calc(100vw - 48px), 560px') ?> alt="Tampilan <?= esc($proyek['judul']) ?>" loading="lazy" decoding="async">
+                            <?php endif; ?>
+
+                            <?php if ($tags): ?>
+                            <div class="dialog-meta">
+                                <?php foreach ($tags as $tag): ?>
+                                <span><?= esc($tag) ?></span>
+                                <?php endforeach; ?>
+                            </div>
+                            <?php endif; ?>
+
+                            <div class="dialog-teks">
+                                <?php foreach ($paragrafDetail as $paragraf): ?>
+                                <?php if (trim($paragraf) === '') { continue; } ?>
+                                <p><?= esc(trim($paragraf)) ?></p>
+                                <?php endforeach; ?>
+                            </div>
+
+                            <?php if ($proyek['hasil']): ?>
+                            <p class="dialog-result"><strong>Hasil:</strong> <?= esc($proyek['hasil']) ?></p>
+                            <?php endif; ?>
+
+                            <?php if ($proyek['link']): ?>
+                            <p><a class="btn" href="<?= esc($proyek['link']) ?>" target="_blank" rel="noopener">Kunjungi Project</a></p>
+                            <?php endif; ?>
+                        </div>
+                    </dialog>
+                </article>
+                <?php endforeach; ?>
+            </div>
+            <?php else: ?>
+            <p class="kosong">Belum ada project yang ditambahkan.</p>
+            <?php endif; ?>
+        </section>
+
+        <!-- ================= 7. KONTAK ================= -->
+        <section class="section wrap reveal contact" id="kontak" aria-labelledby="kontak-title">
+            <div class="section-head">
+                <div class="kicker">Halaman 07<br>Kontak</div>
+                <h2 id="kontak-title">Kirim Surat</h2>
+                <div class="page-no">Bagian<strong>07</strong></div>
+            </div>
+
+            <img class="contact-sticker" src="foto/gelantungan-potong.png" alt="" width="146" height="271" loading="lazy" decoding="async">
+
+            <div class="contact-grid">
+                <div>
+                    <p class="contact-besar">Ke Redaksi<span>Daily Bugle</span></p>
+                    <p class="lead"><?= esc($contactPesan) ?></p>
+                </div>
+
+                <div class="contact-card">
+                    <span class="label">Surel Resmi / Email</span>
+                    <a class="email" href="mailto:<?= esc($contactEmail) ?>"><?= esc($contactEmail) ?></a>
+                    <div class="copy-row">
+                        <button class="btn btn-outline" type="button" id="copyEmail" data-email="<?= esc($contactEmail) ?>">Salin Email</button>
+                        <span class="copy-status" id="copyStatus" role="status" aria-live="polite"></span>
+                    </div>
+                    <?php if ($daftarSosial): ?>
+                    <ul class="socials">
+                        <?php foreach ($daftarSosial as $sosial): ?>
+                        <li>
+                            <span><?= esc($sosial['nama']) ?></span>
+                            <a href="<?= esc($sosial['url']) ?>" target="_blank" rel="noopener noreferrer">Buka ↗</a>
+                        </li>
+                        <?php endforeach; ?>
+                    </ul>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </section>
     </main>
 
-    <footer>
-        <p>&copy; <?= date('Y') ?> <?= esc($footerTeks) ?></p>
+    <footer class="footer">
+        <div class="wrap">
+            <div class="footer-grid">
+                <div>
+                    <h2>The Daily Bugle</h2>
+                    <p><?= esc($footerTeks) ?></p>
+                </div>
+                <div class="mono">
+                    <strong>Edisi</strong><br>
+                    Vol. 01 — No. 03<br>
+                    Digital · <?= $tahunIni ?><br>
+                    <?= esc($lokasiSingkat) ?>
+                </div>
+                <div class="mono">
+                    <strong>Navigasi</strong><br>
+                    <a href="#beranda">Beranda</a><br>
+                    <a href="#project">Project</a><br>
+                    <a href="#kontak">Kontak</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>© <?= $tahunIni ?> <?= esc($heroNama) ?>. Semua hak cipta dilindungi.</span>
+                <span>Dicetak di atas kertas digital.</span>
+            </div>
+        </div>
     </footer>
 
-    <script src="galeri.js"></script>
-    <script src="poster.js"></script>
-    <script src="kursor.js"></script>
-    <script src="loader.js"></script>
+    <button class="to-top" id="toTop" type="button" aria-label="Kembali ke atas">↑</button>
 
+    <script src="beranda.js"></script>
 </body>
 
 </html>
